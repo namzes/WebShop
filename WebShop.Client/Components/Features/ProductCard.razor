@@ -4,6 +4,7 @@
 	<img src="@ImageUrl" alt="name" />
 	<h3>@Name</h3>
 	<p>@Price.ToString("C")</p>
+	<button @onclick="AddToCart">Add to Cart</button>
 </div>
 
 @code
@@ -17,5 +18,9 @@
 	private void NavigateToProductPage()
 	{
 		NavManager.NavigateTo($"/product/{ProductId}");
+	}
+	private void AddToCart()
+	{
+		
 	}
 }
