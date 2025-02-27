@@ -1,40 +1,63 @@
-.container{
+.container {
     min-height: 100vh;
     margin: 0;
     padding: 0;
     background-color: bisque;
     display: grid;
-    grid-template-columns: 100px 1fr;
-    grid-template-rows: 5% 1fr;
+    grid-template-columns: 150px 1fr; 
+    grid-template-rows: 50px 1fr; 
     grid-template-areas:
         "header header"
-        "sidebar content";
+        "sidebar content"; 
 }
+
 .header {
     grid-area: header;
     background-color: lightgreen;
-   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
 }
+
+
 .sidebar {
     grid-area: sidebar;
-    flex-direction: column; 
+    background-color: lightskyblue;
+    padding: 0px;
+    border: 2px solid indianred;
+    justify-content: center;
 }
-.content{
-    grid-area: content;
-    margin: 10px;
-    text-align: center;
+.cart-container {
+    position: absolute;
+    display: inline-block;
+    right: 10px;
+    align-items: center;
+    /* You can add this to center the container if needed */
 }
-@media only screen and (min-width: 600px){
+
+.cart-icon {
+    font-size: 2em;
+    color: #333;
+    
+}
+
+
+
+
+@media only screen and (min-width: 600px) {
     .container {
         grid-template-columns: 200px 1fr;
     }
     .header {
-  
+        /* No changes needed here */
     }
+
     .sidebar {
-      
+        /* No changes needed here */
     }
+
     .content {
-      
+        /* No changes needed here */
     }
 }

@@ -1,6 +1,43 @@
 ﻿@page "/"
+@rendermode InteractiveServer
+@using WebShop.Client.Components.Features
 
-<PageTitle>Home</PageTitle>
+<PageTitle>The Awesome Webshop</PageTitle>
+
+<h1>Our products</h1>
+
+<div class="product-grid">
+	
+
+		@foreach (var p in _products)
+		{
+			<ProductCard ProductId="@p.ProductId" Name="@p.Name" ImageUrl="@p.ImageUrl" Price="@p.Price"></ProductCard>
+		}
 
 
-<h3>Main Layout</h3>
+</div>
+
+@code
+{
+	List<Product> _products = new()
+	{
+		new Product { ProductId = 1, Name = "Daisy Vase", ImageUrl = "lib/images/daisy.jpg", Price = 19.99 },
+		new Product { ProductId = 2, Name = "Sunflower Bouquet", ImageUrl = "lib/images/daisy.jpg", Price = 12.99 },
+		new Product { ProductId = 3, Name = "Tulip Plant", ImageUrl = "lib/images/daisy.jpg", Price = 22.50 },
+		new Product { ProductId = 4, Name = "Lavender Pot", ImageUrl = "lib/images/daisy.jpg", Price = 17.75 },
+		new Product { ProductId = 5, Name = "Orchid Planter", ImageUrl = "lib/images/daisy.jpg", Price = 29.99 },
+		new Product { ProductId = 6, Name = "Rose Garden Kit", ImageUrl = "lib/images/daisy.jpg", Price = 35.00 },
+		new Product { ProductId = 7, Name = "Lily Bloom", ImageUrl = "lib/images/daisy.jpg", Price = 14.99 },
+		new Product { ProductId = 8, Name = "Chrysanthemum Bloom", ImageUrl = "lib/images/daisy.jpg", Price = 18.00 },
+		new Product { ProductId = 9, Name = "Poppy Seed Pack", ImageUrl = "lib/images/daisy.jpg", Price = 8.99 },
+		new Product { ProductId = 10, Name = "Wildflower Seeds", ImageUrl = "lib/images/daisy.jpg", Price = 9.50 }
+	};
+
+	public class Product
+	{
+		public int ProductId { get; set; }
+		public string Name { get; set; }
+		public string ImageUrl { get; set; }
+		public double Price { get; set; }
+	}
+}
