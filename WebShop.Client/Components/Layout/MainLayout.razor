@@ -1,0 +1,17 @@
+﻿@using WebShop.Client.Components.Features
+@inherits LayoutComponentBase
+
+<div class="container">
+	<div class="header">
+		<ShopHeader></ShopHeader>
+	</div>
+	<aside class="sidebar">
+		<NavMenu/>
+	</aside>
+
+	<main class="content">
+		<article class="content">
+			@Body
+		</article>
+	</main>
+</div>
