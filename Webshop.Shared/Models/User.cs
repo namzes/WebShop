@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebShop.Shared.Models;
 
 namespace Webshop.Shared.Models
 {
-    class User
-    {
+    public class User(string username, string password, string email, string address)
+	{
         public int Id { get; set; }
-		public required string Username { get; set; }
-		public required string Password { get; set; }
-		public required string Email { get; set; }
-		public required string Address { get; set; }
+		public required string Username { get; set; } = username;
+		public required string Password { get; set; } = password;
+		public required string Email { get; set; } = email;
+		public required string Address { get; set; } = address;
 
-		public List<CartProduct>? Product { get; set; }
+		public Cart? Cart { get; set; } = new Cart();
 	}
 }

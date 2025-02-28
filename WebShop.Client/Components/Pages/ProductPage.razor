@@ -1,23 +1,11 @@
 ﻿@page "/product/{id:int}"
+@using Webshop.Shared.Models
+@using WebShop.Client.Components.Features
 @rendermode InteractiveServer
-@inject NavigationManager NavManager
+@inject IHttpClientFactory HttpClientFactory
 
 <PageTitle>@CurrentProduct?.Name</PageTitle>
-
-@if (CurrentProduct is null)
-{
-	<p>Product not found.</p>
-}
-else
-{
-	<div class="product-details">
-		<img src="@CurrentProduct.ImageUrl" alt="@CurrentProduct.Name" />
-		<h2>@CurrentProduct.Name</h2>
-		<p>@CurrentProduct.Description</p>
-		<p>@CurrentProduct.Price.ToString("C")</p>
-		<button @onclick="AddToCart">Add to Cart</button>
-	</div>
-}
+<ProductSingle CurrentProduct="CurrentProduct"></ProductSingle>
 
 @code {
 	[Parameter] public int Id { get; set; }
@@ -26,28 +14,7 @@ else
 
 	protected override async Task OnInitializedAsync()
 	{
-		// TODO: Fetch product details (replace this with API call later)
-
-		var products = new List<Product>
-		{
-			new() { Id = 1, Name = "Laptop", Description = "A powerful laptop.", ImageUrl = "laptop.jpg", Price = 999.99 },
-			new() { Id = 2, Name = "Phone", Description = "A modern smartphone.", ImageUrl = "phone.jpg", Price = 499.99 }
-		};
-
-		CurrentProduct = products.FirstOrDefault(p => p.Id == Id);
-	}
-	private void AddToCart()
-	{
-		// TODO: Implement add-to-cart logic
-		Console.WriteLine($"{CurrentProduct?.Name} added to cart!");
-	}
-
-	private class Product
-	{
-		public int Id { get; set; }
-		public string Name { get; set; } = string.Empty;
-		public string Description { get; set; } = string.Empty;
-		public string ImageUrl { get; set; } = string.Empty;
-		public double Price { get; set; }
+		var client = HttpClientFactory.CreateClient("MinimalApi");
+		CurrentProduct = await client.GetFromJsonAsync<Product>($"/Products/{Id}");
 	}
 }

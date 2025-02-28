@@ -1,5 +1,6 @@
 ﻿@inject NavigationManager NavManager
 
+
 <div class="product-card" @onclick="NavigateToProductPage">
 	<img src="@ImageUrl" alt="name" />
 	<h3>@Name</h3>
@@ -13,8 +14,9 @@
 	[Parameter] public string Name { get; set; } = "ProductName";
 	[Parameter] public string Description { get; set; } = "Description";
 	[Parameter] public string ImageUrl { get; set; } = "default.jpg";
-	[Parameter] public double Price { get; set; }
+	[Parameter] public decimal Price { get; set; }
 
+	
 	private void NavigateToProductPage()
 	{
 		NavManager.NavigateTo($"/product/{ProductId}");
@@ -23,4 +25,5 @@
 	{
 		
 	}
+	
 }

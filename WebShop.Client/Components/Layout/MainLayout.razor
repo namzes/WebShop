@@ -4,7 +4,7 @@
 <div class="container">
 	<div class="header">
 		<ShopHeader></ShopHeader>
-		<CartButton></CartButton>
+		<CartButton CartItemCount="CartItemCount"></CartButton>
 	</div>
 	<div class="sidebar">
 		<NavMenu/>
@@ -18,6 +18,5 @@
 </div>
 
 @code {
-	[Parameter]
-	public int CartItemCount { get; set; } = 5;
+	private int CartItemCount { get; set; }
 }

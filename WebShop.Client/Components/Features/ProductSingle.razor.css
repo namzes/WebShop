@@ -1,0 +1,27 @@
+﻿.product-details {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.product-image {
+    width: 50%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.product-info-container {
+    width: 50%;
+    display: flex;
+    flex-direction: column; /* Changed from row to column */
+    align-items: center;
+    justify-content: center;
+    
+}
+.product-info{
+    padding: 10px;
+}

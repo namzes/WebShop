@@ -1,0 +1,28 @@
+﻿@using Webshop.Shared.Models
+
+@if (CurrentProduct is null)
+{
+	<p>Product not found.</p>
+}
+else
+{
+	<div class="product-details">
+		<img class="product-image" src="@CurrentProduct.ImageUrl" alt="@CurrentProduct.Name" />
+		<div class="product-info-container">
+		<h3 class="product-header">@CurrentProduct.Name</h3>
+		<p class="product-info-">Description: @CurrentProduct.Description</p>
+		<p class="product-info">@CurrentProduct.Price.ToString("C")</p>
+		<p class="product-info">In stock: @CurrentProduct.Stock</p>
+		<button @onclick="AddToCart">Add to Cart</button>
+		</div>
+	</div>
+}
+@code {
+	[Parameter] public Product? CurrentProduct { get; set; }
+
+	private void AddToCart()
+	{
+		// TODO: Implement add-to-cart logic
+		Console.WriteLine($"{CurrentProduct?.Name} added to cart!");
+	}
+}

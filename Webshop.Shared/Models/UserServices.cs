@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Webshop.Shared.Models
 {
-    class UserServices
+    public class UserServices
     {
-
+        public User? CurrentUser { get; set; }
     }
 }
