@@ -28,20 +28,6 @@
     border: 2px solid indianred;
     justify-content: center;
 }
-.cart-container {
-    position: absolute;
-    display: inline-block;
-    right: 10px;
-    align-items: center;
-    /* You can add this to center the container if needed */
-}
-
-.cart-icon {
-    font-size: 2em;
-    color: #333;
-    
-}
-
 
 
 

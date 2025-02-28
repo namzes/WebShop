@@ -8,5 +8,6 @@ namespace Webshop.Shared.Models
 {
     class UserServices
     {
+
     }
 }

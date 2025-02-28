@@ -1,0 +1,25 @@
+﻿.cart-container {
+    position: absolute;
+    display: flex;
+    right: 10px;
+    align-items: center;
+}
+
+.cart-icon {
+    font-size: 2em;
+    color: #333;
+    margin-right: 5px;
+}
+
+.nav-link {
+    display: block;
+    padding: 8px 15px;
+    font-size: 14px;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    white-space: nowrap;
+    height: 100%;
+    width: 100%;
+}

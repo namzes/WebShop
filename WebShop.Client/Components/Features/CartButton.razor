@@ -1,0 +1,11 @@
+﻿<div class="cart-container">
+	<a class="nav-link" href="cart">
+		<i class="fa fa-shopping-cart cart-icon"></i>
+	</a>
+	<span class="cart-badge">@CartItemCount</span>
+</div>
+
+@code {
+	[Parameter]
+	public int CartItemCount { get; set; }
+}
