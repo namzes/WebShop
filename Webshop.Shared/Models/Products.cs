@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Webshop.Shared.Models
 {
-    class Product
+    public class Product
     {
 		public int Id { get; set; }
 		public required string Name { get; set; }

@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\lib\images\daisy.jpg" />
+    <ProjectReference Include="..\Webshop.Shared\WebShop.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Webshop.Shared\WebShop.Shared.csproj" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
