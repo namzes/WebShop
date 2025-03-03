@@ -4,8 +4,15 @@
 @rendermode InteractiveServer
 @inject IHttpClientFactory HttpClientFactory
 
-<PageTitle>@CurrentProduct?.Name</PageTitle>
-<ProductSingle CurrentProduct="CurrentProduct"></ProductSingle>
+@if (CurrentProduct == null)
+{
+<p>Loading...</p>
+}
+else
+{
+	<PageTitle>@CurrentProduct?.Name</PageTitle>
+	<ProductSingle CurrentProduct="CurrentProduct"></ProductSingle>
+}
 
 @code {
 	[Parameter] public int Id { get; set; }

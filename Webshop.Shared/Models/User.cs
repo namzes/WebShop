@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Webshop.Shared.Models
 {
-    public class User(string username, string password, string email, string address)
-	{
-        public int Id { get; set; }
-		public required string Username { get; set; } = username;
-		public required string Password { get; set; } = password;
-		public required string Email { get; set; } = email;
-		public required string Address { get; set; } = address;
+    public class User
+    {
 
-		public Cart? Cart { get; set; } = new Cart();
+        public int Id { get; set; }
+		public required string Username { get; set; }
+		public required string Password { get; set; }
+		public required string Email { get; set; }
+		public required string Address { get; set; }
+		public required Cart Cart { get; set; }
 	}
 }

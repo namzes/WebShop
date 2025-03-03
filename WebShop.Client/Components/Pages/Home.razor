@@ -26,7 +26,7 @@
 	protected override async Task OnInitializedAsync()
 	{
 		var client = HttpClientFactory.CreateClient("MinimalApi");
-		var response = await client.GetFromJsonAsync<List<Product>>($"/Products");
+		var response = await client.GetFromJsonAsync<List<Product>>($"api/Products");
 		if (response != null)
 		{
 			_products = response;
