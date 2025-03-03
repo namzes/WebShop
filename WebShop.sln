@@ -5,7 +5,7 @@ VisualStudioVersion = 17.13.35818.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebShop.Client", "WebShop.Client\WebShop.Client.csproj", "{F3FF22B7-2F13-4B40-BD9C-72DB69FA6D1C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebShop.Shared", "Webshop.Shared\WebShop.Shared.csproj", "{F12E9A9B-9C2E-4FB8-84E2-5B72890005D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webshop.Shared", "Webshop.Shared\Webshop.Shared.csproj", "{F12E9A9B-9C2E-4FB8-84E2-5B72890005D8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebShop.API", "API\WebShop.API.csproj", "{AD6C35CB-7349-4AA9-9BB8-080FBC713092}"
 EndProject

@@ -1,4 +1,4 @@
-﻿namespace WebShop.Shared.Models
+﻿namespace Webshop.Shared.Models
 {
 	public class Cart
 	{

@@ -1,4 +1,5 @@
 ﻿@using Webshop.Shared.Models
+@inject NavigationManager NavigationManager
 
 @if (CurrentProduct is null)
 {
@@ -9,13 +10,15 @@ else
 	<div class="product-details">
 		<img class="product-image" src="@CurrentProduct.ImageUrl" alt="@CurrentProduct.Name" />
 		<div class="product-info-container">
-		<h3 class="product-header">@CurrentProduct.Name</h3>
-		<p class="product-info-">Description: @CurrentProduct.Description</p>
-		<p class="product-info">@CurrentProduct.Price.ToString("C")</p>
-		<p class="product-info">In stock: @CurrentProduct.Stock</p>
-		<button @onclick="AddToCart">Add to Cart</button>
+			<h3 class="product-header">@CurrentProduct.Name</h3>
+			<p class="product-info-">@CurrentProduct.Description</p>
+			<p class="product-info">@CurrentProduct.Price.ToString("C")</p>
+			<p class="product-info">In stock: @CurrentProduct.Stock</p>
+			<button class="cart-add-button" @onclick="AddToCart">Add to Cart</button>
 		</div>
+		<button class="back-button" @onclick="BackToHome">Go back to Home</button>
 	</div>
+
 }
 @code {
 	[Parameter] public Product? CurrentProduct { get; set; }
@@ -25,4 +28,10 @@ else
 		// TODO: Implement add-to-cart logic
 		Console.WriteLine($"{CurrentProduct?.Name} added to cart!");
 	}
+
+	private void BackToHome()
+	{
+		NavigationManager.NavigateTo("/");
+	}
+
 }

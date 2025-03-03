@@ -1,3 +1,7 @@
+h1 {
+    font-size: 20px;
+    margin: 0;
+}
 .container {
     min-height: 100vh;
     margin: 0;
@@ -45,5 +49,9 @@
 
     .content {
         /* No changes needed here */
+    }
+    h1 {
+        background-color: lightgreen;
+        font-size: 32px;
     }
 }
