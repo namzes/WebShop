@@ -19,6 +19,14 @@ namespace WebShop.API.Properties
 			modelBuilder.Entity<Product>()
 				.Property(p => p.Price)
 				.HasColumnType("decimal(18,2)");
+
+			modelBuilder.Entity<User>()
+				.HasIndex(u => u.Username)
+				.IsUnique();
+
+			modelBuilder.Entity<User>()
+				.HasIndex(u => u.Email)
+				.IsUnique();
 		}
 	}
 }

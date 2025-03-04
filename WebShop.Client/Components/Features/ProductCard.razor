@@ -3,10 +3,13 @@
 
 <div class="product-card" @onclick="NavigateToProductPage">
 	<img src="@ImageUrl" alt="name" />
+	<div class="product-info-container">
 	<h3>@Name</h3>
 	<p>@Price.ToString("C")</p>
 	<button class="cart-add-button" @onclick="AddToCart">Add to Cart</button>
+	</div>
 </div>
+
 
 @code
 {
@@ -16,14 +19,14 @@
 	[Parameter] public string ImageUrl { get; set; } = "default.jpg";
 	[Parameter] public decimal Price { get; set; }
 
-	
+
 	private void NavigateToProductPage()
 	{
 		NavManager.NavigateTo($"/product/{ProductId}");
 	}
 	private void AddToCart()
 	{
-		
+
 	}
-	
+
 }

@@ -11,7 +11,7 @@ else
 		<img class="product-image" src="@CurrentProduct.ImageUrl" alt="@CurrentProduct.Name" />
 		<div class="product-info-container">
 			<h3 class="product-header">@CurrentProduct.Name</h3>
-			<p class="product-info-">@CurrentProduct.Description</p>
+			<p class="product-info">@CurrentProduct.Description</p>
 			<p class="product-info">@CurrentProduct.Price.ToString("C")</p>
 			<p class="product-info">In stock: @CurrentProduct.Stock</p>
 			<button class="cart-add-button" @onclick="AddToCart">Add to Cart</button>
