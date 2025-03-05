@@ -1,8 +1,6 @@
-﻿using API;
-using System.Xml.Linq;
-using Microsoft.EntityFrameworkCore;
-using Webshop.Shared.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using WebShop.API.Properties;
+
 
 namespace WebShop.API.Extensions
 {
@@ -13,27 +11,16 @@ namespace WebShop.API.Extensions
 			app.MapGet("/", () => "Hello World!");
 			app.MapGet("/api/Products", async (WebShopDbContext dbContext) =>
 			{
+				//TODO: Make ToDto Extension method
 				var products = await dbContext.Products.ToListAsync();
 				return Results.Ok(products);
 			});
-			app.MapGet("/Products/{id}", async (int id,WebShopDbContext dbContext) =>
+			app.MapGet("/api/Products/{id}", async (int id,WebShopDbContext dbContext) =>
 			{
+				//TODO: Make ToDto Extension method
 				var product = await dbContext.Products.FindAsync(id);
 				return Results.Ok(product);
 			});
-			app.MapGet("/User/Create", (string username, string email, string password, string address) => TypedResults.Ok(CreateUser(username, email, password, address)));
-		}
-
-		public static User CreateUser(string username, string email, string password, string address)
-		{
-			return new User()
-			{
-				Username = username,
-				Email = email,
-				Password = password,
-				Address = address,
-				Cart = new Cart()
-			};
 		}
 	}
 }

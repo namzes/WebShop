@@ -1,4 +1,5 @@
-﻿
+﻿@using Webshop.Shared.Models
+@inject IHttpClientFactory HttpClientFactory
 
 <div class="form-container">
 	<h3>Create account</h3>
@@ -6,8 +7,6 @@
 	<input class="text-input" type="password" placeholder="Password" @bind="@Password" />
 	<input id="passwordConfirm"class="text-input @(Password != ConfirmPassword && !string.IsNullOrEmpty(ConfirmPassword) ? "input-error" : "")"
 	       type="password" placeholder="Confirm password" @bind="@ConfirmPassword" />
-	<input class="text-input" type="email" placeholder="Email" @bind="@Email" />
-	<input class="text-input" type="text" placeholder="address" @bind="@Address" />
 	<button text="button-input" @onclick="CreateAccount" disabled="@(Password != ConfirmPassword)">Create Account</button>
 	<p for="passwordConfirm" class="@(Password != ConfirmPassword && !string.IsNullOrEmpty(ConfirmPassword) ? "error-visible" : "error-hidden")">Passwords must match!</p>
 	
@@ -17,13 +16,24 @@
 	private string? Username { get; set; }
 	private string? Password { get; set; }
 	private string? ConfirmPassword { get; set; }
-	private string? Email { get; set; }
-	private string? Address { get; set; }
 
-	private void CreateAccount()
+	private async Task CreateAccount()
 	{
-		
-	}
+		var client = HttpClientFactory.CreateClient("MinimalApi");
+		if (Username == null || Password == null)
+		{
+			return;
+		}
 
+		var user = new UserCreateDTO()
+		{
+			Username = Username,
+			Password = Password
+			
+		};
+
+		await client.PostAsJsonAsync("/Account/register", user);
+
+	}
 
 }

@@ -17,11 +17,11 @@ else
 @code {
 	[Parameter] public int Id { get; set; }
 
-	private Product? CurrentProduct { get; set; }
+	private ProductDTO? CurrentProduct { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{
 		var client = HttpClientFactory.CreateClient("MinimalApi");
-		CurrentProduct = await client.GetFromJsonAsync<Product>($"/Products/{Id}");
+		CurrentProduct = await client.GetFromJsonAsync<ProductDTO>($"api/Products/{Id}");
 	}
 }

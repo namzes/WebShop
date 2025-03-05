@@ -21,16 +21,15 @@
 
 @code
 {
-	List<Product> _products = new();
+	List<ProductDTO> _products = new();
 
 	protected override async Task OnInitializedAsync()
 	{
 		var client = HttpClientFactory.CreateClient("MinimalApi");
-		var response = await client.GetFromJsonAsync<List<Product>>($"api/Products");
+		var response = await client.GetFromJsonAsync<List<ProductDTO>>($"api/Products");
 		if (response != null)
 		{
 			_products = response;
 		}
 	}
-	
 }
