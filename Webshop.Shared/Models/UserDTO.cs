@@ -17,9 +17,10 @@ namespace Webshop.Shared.Models
 		public required string Username { get; set; }
 	}
 
-	public class UserCreateDTO
+	public class UserPostDTO
 	{
-		public required string Username { get; set; }
+		public required string Email { get; set; }
 		public required string Password { get; set; }
+		
 	}
 }

@@ -1,39 +1,44 @@
-﻿@using Webshop.Shared.Models
+﻿@using System.Text
+@using System.Text.Json
+@using Webshop.Shared.Models
 @inject IHttpClientFactory HttpClientFactory
 
 <div class="form-container">
 	<h3>Create account</h3>
-	<input class="text-input" type="text" placeholder="Username" @bind="@Username"/>
-	<input class="text-input" type="password" placeholder="Password" @bind="@Password" />
-	<input id="passwordConfirm"class="text-input @(Password != ConfirmPassword && !string.IsNullOrEmpty(ConfirmPassword) ? "input-error" : "")"
-	       type="password" placeholder="Confirm password" @bind="@ConfirmPassword" />
-	<button text="button-input" @onclick="CreateAccount" disabled="@(Password != ConfirmPassword)">Create Account</button>
-	<p for="passwordConfirm" class="@(Password != ConfirmPassword && !string.IsNullOrEmpty(ConfirmPassword) ? "error-visible" : "error-hidden")">Passwords must match!</p>
-	
+	<input class="text-input" type="text" placeholder="Username" @bind="@_email"/>
+	<input class="text-input" type="password" placeholder="Password" @bind="@_password" />
+	<input id="passwordConfirm"class="text-input @(_password != _confirmPassword && !string.IsNullOrEmpty(_confirmPassword) ? "input-error" : "")"
+	type="password" placeholder="Confirm password" @bind="@_confirmPassword" />
+	<button class="submit-button" text="button-input" @onclick="CreateAccount" disabled="@(_password != _confirmPassword)">Create Account</button>
+	<p for="passwordConfirm" class="@(_password != _confirmPassword && !string.IsNullOrEmpty(_confirmPassword) ? "error-visible" : "error-hidden")">Passwords must match!</p>
 </div>
 
 @code {
-	private string? Username { get; set; }
-	private string? Password { get; set; }
-	private string? ConfirmPassword { get; set; }
+	private string _email = string.Empty;
+	private string _password = string.Empty;
+	private string? _confirmPassword = string.Empty;
+	private bool _userCreated = false;
 
 	private async Task CreateAccount()
 	{
-		var client = HttpClientFactory.CreateClient("MinimalApi");
-		if (Username == null || Password == null)
+
+		if (string.IsNullOrWhiteSpace(_email) || string.IsNullOrWhiteSpace(_password))
 		{
 			return;
 		}
 
-		var user = new UserCreateDTO()
-		{
-			Username = Username,
-			Password = Password
-			
-		};
+		var user = new UserPostDTO()
+			{
+				Email = _email,
+				Password = _password
+			};
 
-		await client.PostAsJsonAsync("/Account/register", user);
+		var client = HttpClientFactory.CreateClient("MinimalApi");
+		var response = await client.PostAsJsonAsync("/Account/register", user);
 
+		string responseBody = await response.Content.ReadAsStringAsync();
+		Console.WriteLine($"Status Code: {response.StatusCode}");
+		Console.WriteLine($"Response Body: {responseBody}");
 	}
 
 }

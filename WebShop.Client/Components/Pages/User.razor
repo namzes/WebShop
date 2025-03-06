@@ -1,11 +1,14 @@
-﻿@page "/createuser"
+﻿@page "/user"
 @using WebShop.Client.Components.Features
 @rendermode InteractiveServer
 
 <main class="user-creation-container">
 	<section class="user-creation-form">
 		<h1>Create Account</h1>
-		<UserCreation></UserCreation>
+		<div>
+		<LoginForm></LoginForm>
+		<UserCreation ></UserCreation>
+		</div>
 	</section>
 </main>
 @code {

@@ -1,0 +1,32 @@
+﻿@using System.Text
+@using System.Text.Json
+@using Webshop.Shared.Models
+@inject IHttpClientFactory HttpClientFactory
+
+<div class="form-container">
+	<h3>Login</h3>
+	<input class="text-input" type="email" placeholder="Email" @bind="@_email" />
+	<input class="text-input" type="password" placeholder="Password" @bind="@_password" />
+	<button class="submit-button" @onclick="HandleLogin">Login</button>
+</div>
+
+@code {
+	private string _email = string.Empty;
+	private string _password = string.Empty;
+
+	private async Task HandleLogin()
+	{
+		if (string.IsNullOrWhiteSpace(_email) || string.IsNullOrWhiteSpace(_password))
+		{
+			return;
+		}
+
+		var json = JsonSerializer.Serialize(new { email = _email, password = _password });
+		var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+		var client = HttpClientFactory.CreateClient("MinimalApi");
+		HttpResponseMessage response = await client.PostAsJsonAsync("/Account/login?useCookies=true", content);
+
+		Console.WriteLine(response.StatusCode);
+	}
+}
