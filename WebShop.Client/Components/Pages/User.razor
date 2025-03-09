@@ -1,16 +1,27 @@
 ﻿@page "/user"
 @using WebShop.Client.Components.Features
+@inject IHttpClientFactory HttpClientFactory
 @rendermode InteractiveServer
 
-<main class="user-creation-container">
-	<section class="user-creation-form">
-		<h1>Create Account</h1>
-		<div>
-		<LoginForm></LoginForm>
-		<UserCreation ></UserCreation>
-		</div>
-	</section>
+<main class="user-container">
+	
+	@if (!_isLoggedIn)
+	{
+		<LoginForm OnLoginStateChanged="HandleLoginStateChanged"></LoginForm>
+	}
+	else
+	{
+		<AccountDetails></AccountDetails>
+	}
+	
 </main>
 @code {
-	
+	 private bool _isLoggedIn = false;
+
+	 private void HandleLoginStateChanged(bool isLoggedIn)
+	 {
+		 _isLoggedIn = isLoggedIn;
+		 StateHasChanged();
+	 }
+
 }

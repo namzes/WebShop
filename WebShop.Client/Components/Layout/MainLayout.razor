@@ -1,9 +1,12 @@
-﻿@using WebShop.Client.Components.Features
+﻿@using System.Security.Claims
+@using WebShop.Client.Components.Features
 @inherits LayoutComponentBase
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 
 <div class="container">
 	<div class="header">
+			<p>Hello, @_email</p>
 		<h1>The Amazing Webshop</h1>
 		<CartButton CartItemCount="CartItemCount"></CartButton>
 	</div>
@@ -20,11 +23,32 @@
 
 @code {
 	private int CartItemCount { get; set; }
+	private ClaimsPrincipal? user;
+	private string? _email;
 
-	[Parameter] public bool IsLoggedIn { get; set; }
-
-	protected override void OnInitialized()
+	protected override async Task OnInitializedAsync()
 	{
+		// var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+		// var user = authState.User;
+
+		
+		// if (user?.Identity?.IsAuthenticated == true && user.Identity.Name != null)
+		// {
+		// 	_email = user.Identity.Name; 
+		// }
+		// else
+		// {
+		// 	_email = "Guest";
+		// }
+
+		
+
+		
+			var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+			user = authState.User;
+
+			Console.WriteLine($"User Authenticated: {user.Identity?.IsAuthenticated}");
+			Console.WriteLine($"User Name: {user.Identity?.Name}");
 		
 	}
 

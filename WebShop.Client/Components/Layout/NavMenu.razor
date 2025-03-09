@@ -1,4 +1,5 @@
-﻿<div class="nav-bar">
+﻿@using System.Diagnostics.Eventing.Reader
+<div class="nav-bar">
 	<nav class="nav-column">
 		<div class="nav-item">
 			<NavLink href="/">
@@ -7,22 +8,26 @@
 				</div>
 			</NavLink>
 		</div>
+		@if(!IsLoggedIn){
+			<div class="nav-item">
+				<NavLink href="/user">
+					<div class="nav-link">
+						Login
+					</div>
+				</NavLink>
+			</div>
+		}
+		else{
+			<div class="nav-item">
+				<NavLink href="/user">
+					<div class="nav-link">
+						My Account
+					</div>
+				</NavLink>
+			</div>
+		}
 		<div class="nav-item">
-			<NavLink href="/user">
-				<div class="nav-link">
-					Login
-				</div>
-			</NavLink>
-		</div>
-		<div class="nav-item">
-			<NavLink href="/user">
-				<div class="nav-link">
-					My Account
-				</div>
-			</NavLink>
-		</div>
-		<div class="nav-item">
-			<NavLink href="/user">
+			<NavLink href="/usercreate">
 				<div class="nav-link">
 					Create Account
 				</div>
@@ -34,6 +39,6 @@
 
 @code
 {
-
+	[Parameter] public bool IsLoggedIn { get; set; }
 }
 

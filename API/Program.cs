@@ -18,21 +18,33 @@ namespace API
 			builder.Services.AddSwaggerGen();
 
 
-			builder.Services.AddAuthorization();
+			
 
-			builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme).AddCookie(IdentityConstants.ApplicationScheme);
+			
 
 			builder.Services.AddIdentityCore<User>()
 				.AddEntityFrameworkStores<WebShopDbContext>()
 				.AddDefaultTokenProviders().AddApiEndpoints();
+
+			builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme).AddCookie(IdentityConstants.ApplicationScheme);
+			builder.Services.AddAuthorization();
 
 
 			var connectionString = builder.Configuration.GetConnectionString("SqlServerConnection");
 
 			builder.Services.AddDbContext<WebShopDbContext>(opt =>
 				opt.UseSqlServer(connectionString).LogTo(Console.WriteLine, LogLevel.Information));
-			
 
+			builder.Services.AddCors(options =>
+			{
+				options.AddPolicy("AllowBlazorApp", policy =>
+				{
+					policy.WithOrigins("https://localhost:7191")  // Adjust to your Blazor app's URL
+						.AllowAnyHeader()
+						.AllowAnyMethod()
+						.AllowCredentials();  // Allow credentials (cookies) to be sent
+				});
+			});
 			var app = builder.Build();
 
 			if (app.Environment.IsDevelopment())
@@ -40,10 +52,14 @@ namespace API
 				app.UseSwagger();
 				app.UseSwaggerUI();
 			}
+			app.UseAuthentication();
+			app.UseAuthorization();
 
 			app.MapEndpoints();
 			app.MapGroup("/Account").MapIdentityApi<User>();
-			
+
+			app.UseCors("AllowBlazorApp");
+
 			app.Run();
 		}
 

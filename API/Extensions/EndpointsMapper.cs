@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using WebShop.API.Properties;
 
 
@@ -24,6 +25,11 @@ namespace WebShop.API.Extensions
 				}
 				return Results.Ok(product.ToProductDTO());
 			});
+			app.MapGet("/Account/me", async (ClaimsPrincipal claims, WebShopDbContext context) =>
+			{
+				string userId = claims.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+				return await context.Users.FindAsync(userId);
+			}).RequireAuthorization();
 		}
 	}
 }
