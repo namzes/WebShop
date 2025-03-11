@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using WebShop.API.Properties;
+using Webshop.Shared.Models;
 
 
 namespace WebShop.API.Extensions
@@ -25,10 +26,41 @@ namespace WebShop.API.Extensions
 				}
 				return Results.Ok(product.ToProductDTO());
 			});
-			app.MapGet("/Account/me", async (ClaimsPrincipal claims, WebShopDbContext context) =>
+			app.MapGet("/Account/me", async (HttpContext context, WebShopDbContext dbContext) =>
 			{
-				string userId = claims.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-				return await context.Users.FindAsync(userId);
+				try
+				{
+					var userId = context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+					
+					if (string.IsNullOrEmpty(userId))
+					{
+						return Results.Unauthorized();
+					}
+
+					var user = await dbContext.Users.FindAsync(userId);
+
+					if (user == null)
+					{
+						return Results.NotFound();
+					}
+
+					// Create a UserDTO to return
+					var userDto = new UserGetDTO()
+					{
+						Id = user.Id,
+						Email = user.Email ?? "default@email.com",
+						
+					};
+
+					
+					return Results.Ok(userDto);
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine($"Error: {ex}");
+					return Results.Problem("An error occurred while processing your request.");
+				}
 			}).RequireAuthorization();
 		}
 	}

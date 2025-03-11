@@ -1,9 +1,7 @@
-﻿@using System.Text
-@using System.Text.Json
-@using Microsoft.AspNetCore.Components.Server
-@using Microsoft.EntityFrameworkCore.Metadata.Internal
+﻿@rendermode InteractiveServer
+@using WebShop.Client.Components.Services
 @inject IHttpClientFactory HttpClientFactory
-@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject WebshopAuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 
 
@@ -14,37 +12,16 @@
 	<button class="submit-button" @onclick="HandleLogin">Login</button>
 </div>
 
-
+<AuthorizeView>
+	<Authorized>Logged in: @context.User.Identity?.Name</Authorized>
+	<NotAuthorized>Not logged in</NotAuthorized>
+</AuthorizeView>
 @code {
 	private string _email = string.Empty;
 	private string _password = string.Empty;
 
-	[Parameter] public EventCallback<bool> OnLoginStateChanged { get; set; }
-
 	private async Task HandleLogin()
 	{
-		if (string.IsNullOrWhiteSpace(_email) || string.IsNullOrWhiteSpace(_password))
-		{
-			return;
-		}
-
-		var json = JsonSerializer.Serialize(new { email = _email, password = _password });
-		var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-		var client = HttpClientFactory.CreateClient("MinimalApi");
-		HttpResponseMessage response = await client.PostAsync("/Account/login?useCookies=true", content);
-
-		if (response.IsSuccessStatusCode)
-		{
-			if (response.Headers.TryGetValues("Set-Cookie", out var cookieHeaders))
-			{
-				foreach (var cookieHeader in cookieHeaders)
-				{
-					Console.WriteLine($"Set-Cookie: {cookieHeader}");
-				}
-			}
-			NavigationManager.NavigateTo("/", forceLoad: true);
-
-		}
+		await AuthenticationStateProvider.SignInAsync(_email, _password);
 	}
 }

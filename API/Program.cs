@@ -18,10 +18,6 @@ namespace API
 			builder.Services.AddSwaggerGen();
 
 
-			
-
-			
-
 			builder.Services.AddIdentityCore<User>()
 				.AddEntityFrameworkStores<WebShopDbContext>()
 				.AddDefaultTokenProviders().AddApiEndpoints();
@@ -45,6 +41,7 @@ namespace API
 						.AllowCredentials();  // Allow credentials (cookies) to be sent
 				});
 			});
+
 			var app = builder.Build();
 
 			if (app.Environment.IsDevelopment())
@@ -63,6 +60,6 @@ namespace API
 			app.Run();
 		}
 
-		
+
 	}
 }
