@@ -6,6 +6,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Webshop.Shared.Models;
+using Microsoft.JSInterop;
 
 namespace WebShop.Client.Components.Services
 {
@@ -13,44 +14,48 @@ namespace WebShop.Client.Components.Services
 	{
 		private AuthenticationState _authState { get; set; }
 		private IHttpClientFactory _httpClientFactory;
+
 		public WebshopAuthenticationStateProvider(IHttpClientFactory httpClientFactory)
 		{
 			_httpClientFactory = httpClientFactory;
 			_authState = new AuthenticationState(new ClaimsPrincipal());
 		}
+
 		public override async Task<AuthenticationState> GetAuthenticationStateAsync()
 		{
-			var httpClient = _httpClientFactory.CreateClient("MinimalApi");
+			var client = _httpClientFactory.CreateClient("MinimalApi");
 			try
 			{
+				var response = await client.GetAsync("/Account/me");
 
-				var userDto = await httpClient.GetFromJsonAsync<UserGetDTO>("/Account/me");
-
-
-				if (userDto == null)
+				if (response.IsSuccessStatusCode)
 				{
-					return GetAnonymousUser();
+					var json = await response.Content.ReadAsStringAsync();
+					var user = JsonSerializer.Deserialize<UserGetDTO>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+
+					if (user != null && !string.IsNullOrEmpty(user.Id) && !string.IsNullOrEmpty(user.Email))
+					{
+						var claims = new List<Claim>
+						{
+							new Claim(ClaimTypes.NameIdentifier, user.Id),
+							new Claim(ClaimTypes.Name, user.Email),
+						};
+						var identity = new ClaimsIdentity(claims, IdentityConstants.ApplicationScheme);
+						var userPrincipal = new ClaimsPrincipal(identity);
+						return new AuthenticationState(userPrincipal);
+					}
 				}
-
-				var claims = new List<Claim>
-				{
-					new Claim(ClaimTypes.Name, userDto.Email),
-					new Claim(ClaimTypes.NameIdentifier, userDto.Id)
-				};
-
-				var identity = new ClaimsIdentity(claims, IdentityConstants.ApplicationScheme);
-
-				var claimsPrincipal = new ClaimsPrincipal(identity);
-
-				return new AuthenticationState(claimsPrincipal);
 			}
 			catch (Exception ex)
 			{
-				// Handle any errors during the fetch process and return an empty ClaimsPrincipal
-				Console.WriteLine($"Error: {ex.Message}");
-				return GetAnonymousUser();
+				Console.WriteLine($"Error fetching user: {ex.Message}");
 			}
+
+			return GetAnonymousUser();
 		}
+
+
 		private static AuthenticationState GetAnonymousUser()
 		{
 			var anonymousIdentity = new ClaimsIdentity();
@@ -61,29 +66,31 @@ namespace WebShop.Client.Components.Services
 
 		public async Task<bool> SignInAsync(string email, string password)
 		{
-			var content = new StringContent(JsonSerializer.Serialize(new { email, password }), Encoding.UTF8, "application/json");
 			var client = _httpClientFactory.CreateClient("MinimalApi");
-
-			var response = await client.PostAsync("/Account/login?useCookies=true", content);
-
-			if (response.IsSuccessStatusCode) // 200 OK
+			try
 			{
-				// After successful login, create a ClaimsIdentity
-				var identity = new ClaimsIdentity(new[]
+				var json = JsonSerializer.Serialize(new { email, password });
+				var content = new StringContent(json, Encoding.UTF8, "application/json");
+				var response = await client.PostAsync("/Account/login?useCookies=true", content);
+
+
+
+				if (response.IsSuccessStatusCode)
 				{
-					new Claim(ClaimTypes.Name, email),
-				}, IdentityConstants.ApplicationScheme);
 
-				var claimsPrincipal = new ClaimsPrincipal(identity);
+					var authState = await GetAuthenticationStateAsync();
+					NotifyAuthenticationStateChanged(Task.FromResult(authState));
+					return true;
 
-				_authState = new AuthenticationState(claimsPrincipal);
-
-				NotifyAuthenticationStateChanged(Task.FromResult(_authState));
-				return true;
+				}
 			}
-
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Login error: {ex.Message}");
+			}
 			return false;
 		}
+
 	}
 
 }

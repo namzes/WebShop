@@ -8,32 +8,33 @@
 				</div>
 			</NavLink>
 		</div>
-		@if(!IsLoggedIn){
-			<div class="nav-item">
-				<NavLink href="/user">
-					<div class="nav-link">
-						Login
-					</div>
-				</NavLink>
-			</div>
-		}
-		else{
-			<div class="nav-item">
-				<NavLink href="/user">
-					<div class="nav-link">
-						My Account
-					</div>
-				</NavLink>
-			</div>
-		}
-		<div class="nav-item">
-			<NavLink href="/usercreate">
-				<div class="nav-link">
-					Create Account
+		<AuthorizeView>
+			<Authorized>
+				<div class="nav-item">
+					<NavLink href="/account">
+						<div class="nav-link">
+							My Account
+						</div>
+					</NavLink>
 				</div>
-			</NavLink>
-		</div>
-
+			</Authorized>
+			<NotAuthorized>
+				<div class="nav-item">
+					<NavLink href="/user">
+						<div class="nav-link">
+							Login
+						</div>
+					</NavLink>
+				</div>
+				<div class="nav-item">
+					<NavLink href="/usercreate">
+						<div class="nav-link">
+							Create Account
+						</div>
+					</NavLink>
+				</div>
+			</NotAuthorized>
+		</AuthorizeView>
 	</nav>
 </div>
 

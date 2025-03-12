@@ -2,16 +2,13 @@
 {
 	public class CartDTO
 	{
-		public CartDTO(UserGetDTO user, Dictionary<ProductDTO, int> products)
+		public CartDTO (UserGetDTO user, Dictionary<ProductDTO, int> products)
 		{
-			Id = 21384532; //Some fake íd
-			User = user;
 			ProductsInCart = products;
-
+			User = user;
 		}
-		public int Id { get; set; }
-		public required UserGetDTO User { get; set; }
-		public Dictionary<ProductDTO, int> ProductsInCart { get; set; } = new();
+		public UserGetDTO User { get; set; }
+		public Dictionary<ProductDTO, int> ProductsInCart { get; set; }
 		public int CartQuantity => ProductsInCart.Count;
 	}
 }

@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Webshop.Shared.Models;
 using WebShop.API.Extensions;
 using WebShop.API.Properties;
-using WebShop.API.Services;
 
 namespace API
 {
@@ -17,14 +16,22 @@ namespace API
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
 
-
+			builder.Services.AddAuthorization();
+			builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme).AddCookie(IdentityConstants.ApplicationScheme);
+			builder.Services.ConfigureApplicationCookie(options =>
+			{
+				options.Cookie.Name = ".AspNetCore.Identity.Application";
+				options.Cookie.HttpOnly = true;
+				options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+				options.Cookie.SameSite = SameSiteMode.None;
+				options.ExpireTimeSpan = TimeSpan.FromDays(7);
+				options.SlidingExpiration = true;
+				options.LoginPath = "/Account/login";
+				options.AccessDeniedPath = "/Account/AccessDenied";
+			});
 			builder.Services.AddIdentityCore<User>()
 				.AddEntityFrameworkStores<WebShopDbContext>()
 				.AddDefaultTokenProviders().AddApiEndpoints();
-
-			builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme).AddCookie(IdentityConstants.ApplicationScheme);
-			builder.Services.AddAuthorization();
-
 
 			var connectionString = builder.Configuration.GetConnectionString("SqlServerConnection");
 
@@ -33,12 +40,12 @@ namespace API
 
 			builder.Services.AddCors(options =>
 			{
-				options.AddPolicy("AllowBlazorApp", policy =>
+				options.AddPolicy("AllowBlazorClient", policy =>
 				{
-					policy.WithOrigins("https://localhost:7191")  // Adjust to your Blazor app's URL
-						.AllowAnyHeader()
+					policy.WithOrigins("https://localhost:7191") // Use your Blazor app's origin
+						.AllowCredentials() // Allow cookies
 						.AllowAnyMethod()
-						.AllowCredentials();  // Allow credentials (cookies) to be sent
+						.AllowAnyHeader();
 				});
 			});
 
@@ -55,7 +62,7 @@ namespace API
 			app.MapEndpoints();
 			app.MapGroup("/Account").MapIdentityApi<User>();
 
-			app.UseCors("AllowBlazorApp");
+			app.UseCors("AllowBlazorClient");
 
 			app.Run();
 		}

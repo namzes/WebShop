@@ -1,6 +1,7 @@
 ﻿@rendermode InteractiveServer
 @using WebShop.Client.Components.Services
 @inject IHttpClientFactory HttpClientFactory
+@inject IJSRuntime JsRuntime
 @inject WebshopAuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 
@@ -22,6 +23,11 @@
 
 	private async Task HandleLogin()
 	{
-		await AuthenticationStateProvider.SignInAsync(_email, _password);
+		var loggedIn = await AuthenticationStateProvider.SignInAsync(_email, _password);
+		if (loggedIn)
+		{
+			NavigationManager.NavigateTo("/");
+		}
+		
 	}
 }
