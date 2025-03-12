@@ -3,6 +3,7 @@
 @using WebShop.Client.Components.Services
 @inherits LayoutComponentBase
 @inject WebshopAuthenticationStateProvider AuthenticationStateProvider
+@inject CartService CartService
 
 
 <div class="container">
@@ -23,14 +24,10 @@
 
 @code {
 	private int CartItemCount { get; set; } = 0;
-	// private ClaimsPrincipal? _user;
+	protected override void OnInitialized()
+	{ 
+		CartItemCount = CartService.GetCartItems();
+	}
 
-	// protected override async Task OnInitializedAsync()
-	// {
-	//  	 var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-	// 	 _user = authState.User;
-
-	// 	 StateHasChanged();
-	// }
 }
 

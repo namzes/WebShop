@@ -1,9 +1,11 @@
 ﻿@rendermode InteractiveServer
+@using Microsoft.EntityFrameworkCore
 @using WebShop.Client.Components.Services
 @inject IHttpClientFactory HttpClientFactory
-@inject IJSRuntime JsRuntime
+@inject IHttpContextAccessor HttpContextAccessor
 @inject WebshopAuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
+@inject CartService CartService
 
 
 <div class="form-container">
@@ -20,14 +22,26 @@
 @code {
 	private string _email = string.Empty;
 	private string _password = string.Empty;
-
+	private string _message = string.Empty;
 	private async Task HandleLogin()
 	{
-		var loggedIn = await AuthenticationStateProvider.SignInAsync(_email, _password);
-		if (loggedIn)
+
+		var responseMessage = await AuthenticationStateProvider.SignInAsync(_email, _password);
+		if (responseMessage.IsSuccessStatusCode)
 		{
+			responseMessage.Headers.TryGetValues("Set-Cookie", out var cookies);
+			var authCookie = cookies.FirstOrDefault().Split('='); var cookieKey = authCookie[0]; var cookieValue = authCookie[1];
+			HttpContextAccessor.HttpContext.Response.Cookies.Append(cookieKey, cookieValue, new CookieOptions()
+			{
+				Secure = false, HttpOnly = true, Path = "/",
+			});
+			CartService.InitializeCart();
 			NavigationManager.NavigateTo("/");
 		}
-		
+		else
+		{
+			_message = "Login failed";
+		}
+
 	}
 }

@@ -25,6 +25,16 @@ namespace WebShop.Client.Components.Services
 			}
 		}
 
+		public int GetCartItems()
+		{
+			if (Cart == null)
+			{
+				return 0;
+			}
+			return Cart.CartQuantity;
+		}
+
+
 		public void AddToCart(ProductDTO productDto)
 		{
 			if (Cart == null)
