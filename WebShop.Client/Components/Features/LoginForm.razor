@@ -1,6 +1,6 @@
 ﻿@rendermode InteractiveServer
-@using Microsoft.EntityFrameworkCore
 @using WebShop.Client.Components.Services
+@using WebShop.Shared.Services
 @inject IHttpClientFactory HttpClientFactory
 @inject IHttpContextAccessor HttpContextAccessor
 @inject WebshopAuthenticationStateProvider AuthenticationStateProvider
@@ -23,25 +23,21 @@
 	private string _email = string.Empty;
 	private string _password = string.Empty;
 	private string _message = string.Empty;
+
 	private async Task HandleLogin()
 	{
-
 		var responseMessage = await AuthenticationStateProvider.SignInAsync(_email, _password);
+
 		if (responseMessage.IsSuccessStatusCode)
 		{
-			responseMessage.Headers.TryGetValues("Set-Cookie", out var cookies);
-			var authCookie = cookies.FirstOrDefault().Split('='); var cookieKey = authCookie[0]; var cookieValue = authCookie[1];
-			HttpContextAccessor.HttpContext.Response.Cookies.Append(cookieKey, cookieValue, new CookieOptions()
-			{
-				Secure = false, HttpOnly = true, Path = "/",
-			});
-			CartService.InitializeCart();
+			// No need to manually handle cookies
+			CartService.InitializeCart(HttpClientFactory.CreateClient("MinimalApi"));
 			NavigationManager.NavigateTo("/");
 		}
 		else
 		{
 			_message = "Login failed";
 		}
-
 	}
+	
 }

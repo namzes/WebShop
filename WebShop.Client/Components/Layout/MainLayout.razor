@@ -1,6 +1,6 @@
-﻿@using System.Security.Claims
-@using WebShop.Client.Components.Features
+﻿@using WebShop.Client.Components.Features
 @using WebShop.Client.Components.Services
+@using WebShop.Shared.Services
 @inherits LayoutComponentBase
 @inject WebshopAuthenticationStateProvider AuthenticationStateProvider
 @inject CartService CartService
@@ -9,7 +9,7 @@
 <div class="container">
 	<header class="header">
 		<h1>The Amazing Webshop</h1>
-		<CartButton CartItemCount="CartItemCount"></CartButton>
+		<CartButton></CartButton>
 	</header>
 	<aside class="sidebar">
 		<NavMenu />
@@ -23,11 +23,6 @@
 </div>
 
 @code {
-	private int CartItemCount { get; set; } = 0;
-	protected override void OnInitialized()
-	{ 
-		CartItemCount = CartService.GetCartItems();
-	}
+	
 
 }
-

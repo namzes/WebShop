@@ -68,27 +68,24 @@ namespace WebShop.Client.Components.Services
 		{
 			var client = _httpClientFactory.CreateClient("MinimalApi");
 			var response = new HttpResponseMessage();
+
 			try
 			{
 				var json = JsonSerializer.Serialize(new { email, password });
 				var content = new StringContent(json, Encoding.UTF8, "application/json");
 				response = await client.PostAsync("/Account/login?useCookies=true", content);
 
-
-
 				if (response.IsSuccessStatusCode)
 				{
-
 					var authState = await GetAuthenticationStateAsync();
 					NotifyAuthenticationStateChanged(Task.FromResult(authState));
-					return response;
-
 				}
 			}
 			catch (Exception ex)
 			{
 				Console.WriteLine($"Login error: {ex.Message}");
 			}
+
 			return response;
 		}
 

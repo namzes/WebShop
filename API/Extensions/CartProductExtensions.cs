@@ -5,37 +5,48 @@ namespace WebShop.API.Extensions
 {
 	public static class CartProductExtensions
 	{
-		public static List<CartProduct> ToCartProducts(this CartDTO cartProductDtos)
+		public static CartProductDTO ToCartProductDTO(this CartProduct cartProduct)
 		{
-			var cartProducts = cartProductDtos.ProductsInCart
-				.Select(productEntry => new CartProduct
+			var cartProductDto = new CartProductDTO()
+			{
+				ProductId = cartProduct.Id,
+				Quantity = cartProduct.Quantity,
+
+			};
+			return cartProductDto;
+		}
+
+		public static List<CartProductDTO> ToCartProductDTOList(this List<CartProduct> cartProducts)
+		{
+			var cartProductDtos = cartProducts.Select(cartProduct => cartProduct.ToCartProductDTO()).ToList();
+
+			return cartProductDtos;
+		}
+
+		public static CartProduct ToCartProduct(this CartProductDTO cartProductDto, User user, Product product)
+		{
+			var cartProduct = new CartProduct()
+			{
+				Id = cartProductDto.ProductId,
+				Quantity = cartProductDto.Quantity,
+				User = user,
+				Product = product
+			};
+			return cartProduct;
+		}
+
+		public static List<CartProduct> ToCartProducts(this List<CartProductDTO> cartProductDtos, List<Product> products, User user)
+		{
+			var cartProducts = cartProductDtos.Select(cpDto =>
 				{
-					Quantity = productEntry.Value,
-					Product = productEntry.Key.ToProduct(),
-					User = cartProductDtos.User.ToUser()
-				}).ToList();
+					var product = products.FirstOrDefault(p => p.Id == cpDto.ProductId);
+					return product != null ? cpDto.ToCartProduct(user, product) : null;
+				}).Where(cp => cp != null)
+				.Cast<CartProduct>()
+				.ToList();
 
 			return cartProducts;
 		}
-		public static CartDTO ToCartDTO(this List<CartProduct> cartProducts)
-		{
-			// Get the user from the first CartProduct (assuming all CartProducts in the list are for the same user)
-			var user = cartProducts.FirstOrDefault()?.User;
-			if (user == null)
-			{
-				throw new InvalidOperationException("Cart does not have a valid user.");
-			}
-
-			// Group the CartProducts by Product
-			var productsInCart = cartProducts
-				.GroupBy(cp => cp.Product)
-				.ToDictionary(
-					group => group.Key.ToProductDTO(),  // Convert each product to a ProductDTO
-					group => group.Sum(cp => cp.Quantity)  // Sum quantities for each product
-				);
-
-			// Return the CartDTO with the User and the products in the cart
-			return new CartDTO(user.ToUserDTO(), productsInCart);
-		}
 	}
+
 }

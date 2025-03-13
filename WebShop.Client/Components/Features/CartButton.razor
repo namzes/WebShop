@@ -1,10 +1,31 @@
-﻿<div class="cart-container">
-	<a class="nav-link" href="cart">
+﻿@using WebShop.Shared.Services
+@inject CartService CartService
+@rendermode InteractiveServer
+<div class="cart-container">
+	<a class="nav-link">
 		<i class="fa fa-shopping-cart cart-icon"></i>
 	</a>
 	<span class="cart-badge">@CartItemCount</span>
 </div>
 
 @code {
-	[Parameter] public int CartItemCount { get; set; }
+	private int CartItemCount => CartService.CartItemCount; // Get value directly
+
+	protected override void OnInitialized()
+	{
+		// Subscribe to cart updates
+		CartService.OnCartUpdated += HandleCartUpdated;
+	}
+
+	private void HandleCartUpdated(int count)
+	{
+		// Force component re-render
+		InvokeAsync(StateHasChanged);
+	}
+
+	public void Dispose()
+	{
+		// Unsubscribe to prevent memory leaks
+		CartService.OnCartUpdated -= HandleCartUpdated;
+	}
 }

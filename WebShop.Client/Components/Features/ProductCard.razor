@@ -1,5 +1,5 @@
-﻿@using WebShop.Client.Components.Services
-@using Webshop.Shared.Models
+﻿@using Webshop.Shared.Models
+@using WebShop.Shared.Services
 @inject NavigationManager NavManager
 @inject CartService CartService
 @rendermode InteractiveServer
@@ -19,7 +19,7 @@
 @code
 {
 	[Parameter] public required ProductDTO Product { get; set; }
-
+	
 
 	private void NavigateToProductPage()
 	{
@@ -29,6 +29,7 @@
 	private void AddToCart()
 	{
 		CartService.AddToCart(Product);
+		StateHasChanged();
 	}
 
 }

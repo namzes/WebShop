@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Net;
+using Blazored.LocalStorage;
 using WebShop.Client.Components;
 using WebShop.Client.Components.Services;
+using WebShop.Shared.Services;
+
 namespace WebShop.Client;
 public class Program
 {
@@ -20,10 +23,10 @@ public class Program
 		
 		builder.Services.AddAuthorization();
 		builder.Services.AddCascadingAuthenticationState();
-
 		builder.Services.AddHttpClient("MinimalApi", client => client.BaseAddress = new Uri("https://localhost:7119"))
 			.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler()
-			{ UseCookies = true,
+			{ 
+				UseCookies = true,
 				CookieContainer = new CookieContainer()
 			});
 		builder.Services.AddHttpContextAccessor();
@@ -31,6 +34,7 @@ public class Program
 		builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<WebshopAuthenticationStateProvider>());
 		builder.Services.AddScoped<CartService>();
 
+		builder.Services.AddBlazoredLocalStorage();
 
 		var app = builder.Build();
 

@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Http.HttpResults;
-using WebShop.API.Properties;
 using Webshop.Shared.Models;
+using WebShop.API.Properties;
 
 
 namespace WebShop.API.Extensions
@@ -75,26 +74,37 @@ namespace WebShop.API.Extensions
 				}
 
 				var cartProducts = await dbContext.CartProducts.Where(cp => cp.User.Id == userId).ToListAsync();
-				var user = await dbContext.Users.FindAsync(userId);
-				if (user == null)
-				{
-					return Results.NotFound();
-				}
-				if (!cartProducts.Any())
-				{
-					
-					var newCart = new CartDTO(user.ToUserDTO(),new Dictionary<ProductDTO, int>());
-					return Results.Ok(newCart);
-				}
-				return Results.Ok(cartProducts.Any() ? cartProducts.ToCartDTO() : new CartDTO(user.ToUserDTO(), new Dictionary<ProductDTO, int>()));
 
+				return Results.Ok(cartProducts.Any() ? cartProducts.ToCartProductDTOList() : new List<CartProductDTO>());
 			}).RequireAuthorization();
 			
 
-			app.MapPost("/api/Cart", async (WebShopDbContext dbContext, CartDTO cartDto) =>
+			app.MapPost("/api/Cart", async (HttpContext httpContext, WebShopDbContext dbContext, CartDTO cartDto) =>
 			{
-				var cartProducts = cartDto.ToCartProducts();
+				var userId = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+				if (string.IsNullOrEmpty(userId))
+				{
+					return Results.Unauthorized();
+				}
+				var user = await dbContext.Users.FindAsync(userId);
+				if (user == null)
+				{
+					return Results.NotFound("User not found.");
+				}
+
+				var productIds = cartDto.CartProductDtos.Select(p => p.ProductId).ToList();
+				var products = await dbContext.Products.Where(p => productIds.Contains(p.Id)).ToListAsync();
+
+				var cartProducts = cartDto.CartProductDtos.ToCartProducts(products, user);
+
+				if (!cartProducts.Any())
+				{
+					return Results.BadRequest("No valid cart products found.");
+				}
+
 				await dbContext.CartProducts.AddRangeAsync(cartProducts);
+				await dbContext.SaveChangesAsync();
+
 				return Results.Ok();
 
 			}).RequireAuthorization();
