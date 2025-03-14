@@ -1,0 +1,21 @@
+﻿@using Webshop.Shared.Models
+@inject NavigationManager NavManager
+
+<div class="product-list-item" @onclick="NavigateToProductPage">
+	<img src="@Product.ImageUrl" alt="@Product.Name" class="product-image" />
+	<div class="product-info-container">
+		<h3>@Product.Name</h3>
+		<p>@Product.Price.ToString("C")</p>
+		<p>Qty: @Product.Quantity</p>
+	</div>
+	<button class="cart-add-button">Add to Cart</button>
+</div>
+
+@code {
+	[Parameter] public required CartProductDisplayDTO Product { get; set; }
+
+	private void NavigateToProductPage()
+	{
+		NavManager.NavigateTo($"/product/{Product.Id}");
+	}
+}

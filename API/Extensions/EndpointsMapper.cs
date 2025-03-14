@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Webshop.Shared.Models;
 using WebShop.API.Properties;
@@ -77,9 +78,26 @@ namespace WebShop.API.Extensions
 
 				return Results.Ok(cartProducts.Any() ? cartProducts.ToCartProductDTOList() : new List<CartProductDTO>());
 			}).RequireAuthorization();
-			
 
-			app.MapPost("/api/Cart", async (HttpContext httpContext, WebShopDbContext dbContext, CartDTO cartDto) =>
+			app.MapPost("/api/GetCartProducts",
+				async (HttpContext httpContext, [FromServices] WebShopDbContext dbContext, [FromBody] List<CartProductDTO> cartProductDtos) =>
+				{
+					var userPrincipal = httpContext.User;
+					var userId = userPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+					if (string.IsNullOrEmpty(userId))
+					{
+						return Results.Unauthorized();
+					}
+
+					var products = await dbContext.Products
+						.Where(cp => cartProductDtos.Select(cpd => cpd.ProductId).Contains(cp.Id)).ToListAsync();
+
+					return Results.Ok(products.ToProductDTOs());
+
+				}).RequireAuthorization();
+
+			app.MapPost("/api/Cart", async ( HttpContext httpContext,  WebShopDbContext dbContext, CartDTO cartDto) =>
 			{
 				var userId = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 				if (string.IsNullOrEmpty(userId))

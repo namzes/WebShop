@@ -19,9 +19,8 @@ public class Program
 
 		builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
 			.AddCookie(IdentityConstants.ApplicationScheme);
-
-		
 		builder.Services.AddAuthorization();
+
 		builder.Services.AddCascadingAuthenticationState();
 		builder.Services.AddHttpClient("MinimalApi", client => client.BaseAddress = new Uri("https://localhost:7119"))
 			.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler()
@@ -32,7 +31,7 @@ public class Program
 		builder.Services.AddHttpContextAccessor();
 		builder.Services.AddScoped<WebshopAuthenticationStateProvider>();
 		builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<WebshopAuthenticationStateProvider>());
-		builder.Services.AddScoped<CartService>();
+		builder.Services.AddSingleton<CartService>();
 
 		builder.Services.AddBlazoredLocalStorage();
 

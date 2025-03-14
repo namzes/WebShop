@@ -1,15 +1,15 @@
 ﻿@using WebShop.Client.Components.Features
-@using WebShop.Client.Components.Services
-@using WebShop.Shared.Services
 @inherits LayoutComponentBase
-@inject WebshopAuthenticationStateProvider AuthenticationStateProvider
-@inject CartService CartService
+@inject NavigationManager NavManager
 
 
 <div class="container">
 	<header class="header">
 		<h1>The Amazing Webshop</h1>
-		<CartButton></CartButton>
+		<div @onclick="NavigateToCart">
+			<CartButton></CartButton>
+			</div>
+			
 	</header>
 	<aside class="sidebar">
 		<NavMenu />
@@ -23,6 +23,9 @@
 </div>
 
 @code {
-	
+	public void NavigateToCart()
+	{
+		NavManager.NavigateTo("/cart", forceLoad: false);
+	}
 
 }

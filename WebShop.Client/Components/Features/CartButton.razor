@@ -1,6 +1,7 @@
 ﻿@using WebShop.Shared.Services
 @inject CartService CartService
 @rendermode InteractiveServer
+
 <div class="cart-container">
 	<a class="nav-link">
 		<i class="fa fa-shopping-cart cart-icon"></i>
@@ -28,4 +29,7 @@
 		// Unsubscribe to prevent memory leaks
 		CartService.OnCartUpdated -= HandleCartUpdated;
 	}
+
+	
+	
 }

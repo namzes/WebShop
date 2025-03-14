@@ -1,0 +1,45 @@
+﻿@page "/cart"
+@using Webshop.Shared.Models
+@using WebShop.Client.Components.Features
+@using WebShop.Client.Components.Services
+@using WebShop.Shared.Services
+@inject CartService CartService
+@inject WebshopAuthenticationStateProvider AuthStateProvider
+@inject NavigationManager NavManager
+@inject IHttpClientFactory HttpClientFactory
+
+<h3>Cart</h3>
+
+<div class="container">
+	<div class="cart-product-container">
+		@foreach (var p in Products)
+		{
+			<CartProduct Product="p"></CartProduct>
+		}
+	</div>
+</div>
+
+@code {
+	public required List<CartProductDisplayDTO> Products = new();
+
+	protected override async Task OnInitializedAsync()
+	{
+		var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+		var user = authState?.User;
+
+		if (user == null || !user.Identity?.IsAuthenticated == true)
+		{
+			NavManager.NavigateTo("/user");
+		}
+		else
+		{
+			Products = await CartService.GetCartProducts(HttpClientFactory.CreateClient("MinimalApi"));
+		}
+		StateHasChanged();
+	}
+
+	
+
+	
+
+}

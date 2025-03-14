@@ -16,7 +16,4 @@ namespace Webshop.Shared.Models
 		public required string ImageUrl { get; set; }
 		public int Stock { get; set; }
 	}
-   
-
-    
 }
