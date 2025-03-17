@@ -79,7 +79,7 @@ namespace WebShop.API.Extensions
 				return Results.Ok(cartProducts.Any() ? cartProducts.ToCartProductDTOList() : new List<CartProductDTO>());
 			}).RequireAuthorization();
 
-			app.MapPost("/api/GetCartProducts",
+			app.MapPost("/api/GetProductsFromCartProducts",
 				async (HttpContext httpContext, [FromServices] WebShopDbContext dbContext, [FromBody] List<CartProductDTO> cartProductDtos) =>
 				{
 					var userPrincipal = httpContext.User;
@@ -117,7 +117,7 @@ namespace WebShop.API.Extensions
 
 				if (!cartProducts.Any())
 				{
-					return Results.BadRequest("No valid cart products found.");
+					return Results.BadRequest("No valid cart products created.");
 				}
 
 				await dbContext.CartProducts.AddRangeAsync(cartProducts);

@@ -1,5 +1,7 @@
-﻿@using Webshop.Shared.Models
+﻿@using WebShop.Client.Components.Services
+@using Webshop.Shared.Models
 @inject NavigationManager NavigationManager
+@inject CartService CartService
 
 @if (CurrentProduct is null)
 {
@@ -23,10 +25,17 @@ else
 @code {
 	[Parameter] public ProductDTO? CurrentProduct { get; set; }
 
-	private void AddToCart()
+	private async Task AddToCart()
 	{
-		// TODO: Implement add-to-cart logic
-		Console.WriteLine($"{CurrentProduct?.Name} added to cart!");
+		if (CurrentProduct != null)
+		{
+			await CartService.AddToCart(CurrentProduct);
+			StateHasChanged();
+		}
+		else
+		{
+			BackToHome();
+		}
 	}
 
 	private void BackToHome()

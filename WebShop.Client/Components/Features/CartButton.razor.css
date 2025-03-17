@@ -3,6 +3,7 @@
     display: flex;
     right: 50px;
     align-items: center;
+    
 }
 
 .cart-icon {
@@ -22,4 +23,9 @@
     white-space: nowrap;
     height: 100%;
     width: 100%;
+}
+
+.cart-container:hover {
+    transform: scale(1.05);
+    cursor: pointer;
 }

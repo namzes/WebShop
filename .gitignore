@@ -365,3 +365,7 @@ FodyWeavers.xsd
 /WebShop.Client/appsettings.Development.json
 /WebShop.Client/appsettings.Development.json
 appsettings.Development.json
+
+# MD
+Analysis.md
+Assignment.md

@@ -1,12 +1,14 @@
 ﻿@page "/cart"
+@using Blazored.LocalStorage
 @using Webshop.Shared.Models
 @using WebShop.Client.Components.Features
 @using WebShop.Client.Components.Services
-@using WebShop.Shared.Services
+@rendermode InteractiveServer
 @inject CartService CartService
 @inject WebshopAuthenticationStateProvider AuthStateProvider
 @inject NavigationManager NavManager
 @inject IHttpClientFactory HttpClientFactory
+@inject ILocalStorageService Lo
 
 <h3>Cart</h3>
 
@@ -16,6 +18,13 @@
 		{
 			<CartProduct Product="p"></CartProduct>
 		}
+	</div>
+	<div class="cart-total">
+		<h4>Total: @Products.Sum(p => p.Price * p.Quantity).ToString("C")</h4>
+	</div>
+	<div class="button-container">
+		<button class="checkout-button" @onclick="ClearCart">Clear cart</button>
+		<button class="checkout-button" @onclick="CheckoutCart">Go to Checkout</button>
 	</div>
 </div>
 
@@ -31,15 +40,26 @@
 		{
 			NavManager.NavigateTo("/user");
 		}
-		else
+	}
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
 		{
-			Products = await CartService.GetCartProducts(HttpClientFactory.CreateClient("MinimalApi"));
+			Products = await CartService.GetCartProductDisplayDtos();
+			await InvokeAsync(StateHasChanged);
 		}
-		StateHasChanged();
+	}
+	private async Task ClearCart()
+	{
+		await CartService.ClearCart();
+	}
+	private void CheckoutCart()
+	{
+		NavManager.NavigateTo("/checkout");
 	}
 
-	
 
-	
+
+
 
 }

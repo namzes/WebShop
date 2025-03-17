@@ -1,14 +1,19 @@
-﻿@using Webshop.Shared.Models
+﻿@using WebShop.Client.Components.Services
+@using Webshop.Shared.Models
 @inject NavigationManager NavManager
+@inject CartService CartService
 
-<div class="product-list-item" @onclick="NavigateToProductPage">
-	<img src="@Product.ImageUrl" alt="@Product.Name" class="product-image" />
+<div class="@(Product.Stock > 0 ? "product-list-item" : "product-list-item-sold")">
+	<img src="@Product.ImageUrl" alt="@Product.Name" class="product-image" @onclick="NavigateToProductPage"/>
 	<div class="product-info-container">
 		<h3>@Product.Name</h3>
 		<p>@Product.Price.ToString("C")</p>
-		<p>Qty: @Product.Quantity</p>
+		<div class="quantity-controls">
+			<button @onclick="DecreaseQuantity" class="quantity-button">-</button>
+			<span>Qty: @Product.Quantity</span>
+			<button @onclick="IncreaseQuantity" class="quantity-button" disabled="@IsIncreaseDisabled">+</button>
+		</div>
 	</div>
-	<button class="cart-add-button">Add to Cart</button>
 </div>
 
 @code {
@@ -18,4 +23,28 @@
 	{
 		NavManager.NavigateTo($"/product/{Product.Id}");
 	}
+	private bool IsIncreaseDisabled => Product.Quantity >= Product.Stock;
+
+
+	private async Task IncreaseQuantity()
+	{
+
+		await CartService.AddToCart(Product.ToProductDto());
+		StateHasChanged();
+	}
+
+	private async Task DecreaseQuantity()
+	{
+		if (Product.Quantity > 1)
+		{
+			Product.Quantity--;
+		}
+		else
+		{
+			await CartService.RemoveFromCart(Product.ToProductDto());
+			StateHasChanged();
+		}
+
+	}
+
 }

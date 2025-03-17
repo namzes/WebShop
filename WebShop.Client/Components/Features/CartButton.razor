@@ -1,8 +1,9 @@
-﻿@using WebShop.Shared.Services
+﻿@using WebShop.Client.Components.Services
 @inject CartService CartService
 @rendermode InteractiveServer
+@inject NavigationManager NavManager
 
-<div class="cart-container">
+<div class="cart-container" @onclick="NavigateToCart">
 	<a class="nav-link">
 		<i class="fa fa-shopping-cart cart-icon"></i>
 	</a>
@@ -29,7 +30,10 @@
 		// Unsubscribe to prevent memory leaks
 		CartService.OnCartUpdated -= HandleCartUpdated;
 	}
-
+	public void NavigateToCart()
+	{
+		NavManager.NavigateTo("/cart", forceLoad: false);
+	}
 	
 	
 }

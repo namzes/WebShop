@@ -1,15 +1,17 @@
-﻿@using Webshop.Shared.Models
-@using WebShop.Shared.Services
+﻿@using System.Diagnostics.Eventing.Reader
+@using WebShop.Client.Components.Services
+@using Webshop.Shared.Models
 @inject NavigationManager NavManager
 @inject CartService CartService
+@inject WebshopAuthenticationStateProvider AuthStateProvider
 @rendermode InteractiveServer
-<div>
+
+<div class="product-wrapper">
 	<div class="product-card" @onclick="NavigateToProductPage">
 		<img src="@Product.ImageUrl" alt="name" />
 		<div class="product-info-container">
 			<h3>@Product.Name</h3>
 			<p>@Product.Price.ToString("C")</p>
-		
 		</div>
 	</div>
 	<button class="cart-add-button" @onclick="AddToCart">Add to Cart</button>
@@ -26,9 +28,19 @@
 		NavManager.NavigateTo($"/product/{Product.Id}");
 	}
 
-	private void AddToCart()
+	private async Task AddToCart()
 	{
-		CartService.AddToCart(Product);
+		var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+		var user = authState.User;
+		if (user?.Identity?.IsAuthenticated == true)
+		{ 
+			await CartService.AddToCart(Product);
+		}
+		else
+		{
+			NavManager.NavigateTo("/user");
+		}
+
 		StateHasChanged();
 	}
 

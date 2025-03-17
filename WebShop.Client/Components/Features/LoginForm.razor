@@ -1,6 +1,5 @@
 ﻿@rendermode InteractiveServer
 @using WebShop.Client.Components.Services
-@using WebShop.Shared.Services
 @inject IHttpClientFactory HttpClientFactory
 @inject IHttpContextAccessor HttpContextAccessor
 @inject WebshopAuthenticationStateProvider AuthenticationStateProvider
@@ -30,8 +29,8 @@
 
 		if (responseMessage.IsSuccessStatusCode)
 		{
-			// No need to manually handle cookies
-			CartService.InitializeCart(HttpClientFactory.CreateClient("MinimalApi"));
+			
+			await CartService.GetCart();
 			NavigationManager.NavigateTo("/");
 		}
 		else

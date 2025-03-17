@@ -4,7 +4,6 @@ using System.Net;
 using Blazored.LocalStorage;
 using WebShop.Client.Components;
 using WebShop.Client.Components.Services;
-using WebShop.Shared.Services;
 
 namespace WebShop.Client;
 public class Program
@@ -31,7 +30,9 @@ public class Program
 		builder.Services.AddHttpContextAccessor();
 		builder.Services.AddScoped<WebshopAuthenticationStateProvider>();
 		builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<WebshopAuthenticationStateProvider>());
-		builder.Services.AddSingleton<CartService>();
+		builder.Services.AddScoped<ICartRepository, LocalStorageCartRepository>();
+		builder.Services.AddScoped<IProductService, ApiProductService>();
+		builder.Services.AddScoped<CartService>();
 
 		builder.Services.AddBlazoredLocalStorage();
 

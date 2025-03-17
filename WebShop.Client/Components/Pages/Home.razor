@@ -1,8 +1,10 @@
 ﻿@page "/"
 @rendermode InteractiveServer
 @using WebShop.Client.Components.Features
+@using WebShop.Client.Components.Services
 @using Webshop.Shared.Models
 @inject IHttpClientFactory HttpClientFactory
+@inject IProductService ProductService
 
 <PageTitle>The Awesome Webshop</PageTitle>
 
@@ -25,11 +27,6 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		var client = HttpClientFactory.CreateClient("MinimalApi");
-		var response = await client.GetFromJsonAsync<List<ProductDTO>>($"api/Products");
-		if (response != null)
-		{
-			_products = response;
-		}
+		_products = await ProductService.GetProducts();
 	}
 }
