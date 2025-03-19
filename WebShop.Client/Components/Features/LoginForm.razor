@@ -14,10 +14,6 @@
 	<button class="submit-button" @onclick="HandleLogin">Login</button>
 </div>
 
-<AuthorizeView>
-	<Authorized>Logged in: @context.User.Identity?.Name</Authorized>
-	<NotAuthorized>Not logged in</NotAuthorized>
-</AuthorizeView>
 @code {
 	private string _email = string.Empty;
 	private string _password = string.Empty;

@@ -14,8 +14,8 @@
 - [x] Produktsidan visar alla detaljer för den valda produkten.
 - [x] På produktsidan finns en knapp för att lägga till produkten i varukorgen.
 - [x] Man kan navigera till en produktsida via webbadressen (t.ex. `localhost/product/1`).
-- [ ] En varukorgssida är tillgänglig via en knapp eller länk.
-- [ ] Varukorgssidan visar alla produkter som lagts i varukorgen.
+- [x] En varukorgssida är tillgänglig via en knapp eller länk.
+- [x] Varukorgssidan visar alla produkter som lagts i varukorgen.
 - [ ] Varukorgssidan innehåller ett formulär för att fylla i adressuppgifter.
 - [ ] När formuläret skickas in omdirigeras användaren till en bekräftelsesida.
 - [ ] Bekräftelsesidan visar köpta produkter samt användarens namn och adressuppgifter.
@@ -51,10 +51,10 @@
 
 - [x] Användare kan registrera ett konto med användarnamn och lösenord.
 - [x] Användare kan logga in med sitt användarnamn och lösenord.
-- [ ] Varukorgen kommer ihåg vilka produkter som användaren har lagt till vid inloggning.
+- [x] Varukorgen kommer ihåg vilka produkter som användaren har lagt till vid inloggning.
 - [ ] Ett köp kan inte genomföras utan att användaren är inloggad.
 - [ ] Informationen hämtas från servern via ett HTTP-anrop till en API-endpoint.
-- [ ] Delade klasser används i både frontend och backend.
+- [x] Delade klasser används i både frontend och backend.
 
 ---
 
@@ -69,7 +69,7 @@
 
 ## 📝 Dokumentation
 
-- [ ] En fil `Analysis.md` finns i projektets rotkatalog.
+- [x] En fil `Analysis.md` finns i projektets rotkatalog.
 - [ ] `Analysis.md` dokumenterar hur .NET Core:s felsökningsverktyg användes för att identifiera och åtgärda minst en bugg.
 - [ ] Felsökningsprocessen innehåller en förklaring samt en reflektion.
-- [ ] En fil `Assignment.md` finns som listar alla kriterier och har kryssrutor för att markera avklarade uppgifter.
+- [x] En fil `Assignment.md` finns som listar alla kriterier och har kryssrutor för att markera avklarade uppgifter.

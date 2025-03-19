@@ -1,0 +1,17 @@
+﻿.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.cart-product-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.cart-item-info h4, .cart-item-info p {
+    margin: 0;
+}

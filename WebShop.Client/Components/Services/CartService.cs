@@ -144,7 +144,7 @@ namespace WebShop.Client.Components.Services
 			{
 				if (cartProductDto.Quantity > 1)
 				{
-					cartProductDto.Quantity--;
+					cartProductDto.Quantity --;
 				}
 				else
 				{

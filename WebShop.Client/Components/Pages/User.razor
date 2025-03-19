@@ -5,14 +5,15 @@
 
 <main class="user-container">
 	
-	@if (!_isLoggedIn)
-	{
-		<LoginForm></LoginForm>
-	}
-	else
-	{
-		<AccountDetails></AccountDetails>
-	}
+	<AuthorizeView>
+		<Authorized>
+
+		</Authorized>
+		<NotAuthorized>
+			<LoginForm></LoginForm>
+		</NotAuthorized>
+	</AuthorizeView>
+	
 	
 </main>
 @code {

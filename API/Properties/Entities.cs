@@ -30,6 +30,10 @@ namespace WebShop.API.Properties
 	{
 		public int Id { get; set; }
 		public required User User { get; set; }
+		[StringLength(200)]
+		public required string ShippingAddress { get; set; }
+		[StringLength(200)]
+		public required string City { get; set; }
 		public List<CartProduct> OrderedProducts { get; set; } = new();
 	}
 }

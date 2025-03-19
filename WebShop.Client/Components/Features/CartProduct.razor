@@ -2,8 +2,9 @@
 @using Webshop.Shared.Models
 @inject NavigationManager NavManager
 @inject CartService CartService
+@rendermode InteractiveServer
 
-<div class="@(Product.Stock > 0 ? "product-list-item" : "product-list-item-sold")">
+<div class="@(Product.Stock > 0 ? "product-list-Product" : "product-list-Product-sold")">
 	<img src="@Product.ImageUrl" alt="@Product.Name" class="product-image" @onclick="NavigateToProductPage"/>
 	<div class="product-info-container">
 		<h3>@Product.Name</h3>
@@ -18,6 +19,7 @@
 
 @code {
 	[Parameter] public required CartProductDisplayDTO Product { get; set; }
+	[Parameter] public EventCallback OnQuantityChanged { get; set; }
 
 	private void NavigateToProductPage()
 	{
@@ -37,12 +39,16 @@
 	{
 		if (Product.Quantity > 1)
 		{
-			Product.Quantity--;
+			await CartService.RemoveFromCart(Product.ToProductDto());
+			await OnQuantityChanged.InvokeAsync();
+			StateHasChanged();
 		}
 		else
 		{
 			await CartService.RemoveFromCart(Product.ToProductDto());
+			await OnQuantityChanged.InvokeAsync();
 			StateHasChanged();
+
 		}
 
 	}

@@ -16,7 +16,7 @@
 	<div class="cart-product-container">
 		@foreach (var p in Products)
 		{
-			<CartProduct Product="p"></CartProduct>
+			<CartProduct Product="p" OnQuantityChanged="UpdateCart" />
 		}
 	</div>
 	<div class="cart-total">
@@ -58,6 +58,11 @@
 		NavManager.NavigateTo("/checkout");
 	}
 
+	private async Task UpdateCart()
+	{
+		Products = await CartService.GetCartProductDisplayDtos(); // Refresh cart list
+		await InvokeAsync(StateHasChanged); // Ensure UI updates
+	}
 
 
 

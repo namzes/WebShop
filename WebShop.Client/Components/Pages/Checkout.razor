@@ -1,0 +1,61 @@
+﻿@page "/checkout"
+@using WebShop.Client.Components.Services
+@using Webshop.Shared.Models
+@inject CartService CartService
+@inject WebshopAuthenticationStateProvider AuthStateProvider
+@inject NavigationManager NavManager
+
+<div class="checkout-container">
+	<h2>Checkout</h2>
+	<div class="cart-summary">
+		<h3>Order Summary</h3>
+		@foreach (var product in Products)
+		{
+			
+		}
+		<div class="total-cost">
+			<h3>Total: @TotalPrice.ToString("C")</h3>
+		</div>
+	</div>
+    
+	<form class="checkout-form">
+		<h3>Shipping Information</h3>
+		<label>First Name</label>
+		<input type="text" required />
+        
+		<label>Last Name</label>
+		<input type="text" required />
+        
+		<label>Address</label>
+		<input type="text" required />
+        
+		<label>City</label>
+		<input type="text" required />
+        
+		<button type="submit" class="checkout-button">Place Order</button>
+	</form>
+</div>
+
+@code {
+	public required List<CartProductDisplayDTO> Products = new();
+	public decimal TotalPrice => Products.Sum(p => p.Price * p.Quantity);
+
+	protected override async Task OnInitializedAsync()
+	{
+		var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+		var user = authState?.User;
+
+		if (user == null || !user.Identity?.IsAuthenticated == true)
+		{
+			NavManager.NavigateTo("/user");
+		}
+	}
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			Products = await CartService.GetCartProductDisplayDtos();
+			await InvokeAsync(StateHasChanged);
+		}
+	}
+}
