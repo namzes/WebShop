@@ -16,8 +16,24 @@ public class Program
 		builder.Services.AddRazorComponents()
 			.AddInteractiveServerComponents();
 
+		builder.Services.AddServerSideBlazor()
+			.AddHubOptions(options =>
+			{
+				options.ClientTimeoutInterval = TimeSpan.FromMinutes(6);
+				options.HandshakeTimeout = TimeSpan.FromMinutes(1); 
+				options.KeepAliveInterval = TimeSpan.FromSeconds(10);
+			});
+
 		builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
-			.AddCookie(IdentityConstants.ApplicationScheme);
+			.AddCookie(IdentityConstants.ApplicationScheme, options =>
+			{
+				options.LoginPath = "/Account/login";
+				options.LogoutPath = "/Account/logout";
+				options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+				options.SlidingExpiration = true;
+				options.Cookie.HttpOnly = true;
+				options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+			});
 		builder.Services.AddAuthorization();
 
 		builder.Services.AddCascadingAuthenticationState();

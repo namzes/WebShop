@@ -1,5 +1,7 @@
 ﻿@using WebShop.Client.Components.Features
+@using WebShop.Client.Components.Services
 @inherits LayoutComponentBase
+@inject WebshopAuthenticationStateProvider AuthenticationStateProvider
 
 
 
@@ -20,7 +22,29 @@
 	</main>
 </div>
 
-@code {
-	
 
+@code {
+	private Timer? _timer;
+
+	protected override void OnInitialized()
+	{
+		_timer = new Timer(_ =>
+		{
+			_ = RefreshAuthState();
+		}, null, TimeSpan.Zero, TimeSpan.FromMinutes(5));
+	}
+
+	private async Task RefreshAuthState()
+	{
+		var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+		if (authState.User.Identity is not { IsAuthenticated: true })
+		{
+			StateHasChanged(); // Refresh UI if authentication is lost
+		}
+	}
+
+	public void Dispose()
+	{
+		_timer?.Dispose();
+	}
 }

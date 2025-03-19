@@ -23,8 +23,8 @@ namespace API
 				options.Cookie.Name = ".AspNetCore.Identity.Application";
 				options.Cookie.HttpOnly = true;
 				options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-				options.Cookie.SameSite = SameSiteMode.None;
-				options.ExpireTimeSpan = TimeSpan.FromDays(7);
+				options.Cookie.SameSite = SameSiteMode.Lax;
+				options.ExpireTimeSpan = TimeSpan.FromHours(7);
 				options.SlidingExpiration = true;
 				options.LoginPath = "/Account/login";
 				options.AccessDeniedPath = "/Account/AccessDenied";
