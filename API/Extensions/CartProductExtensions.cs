@@ -27,7 +27,6 @@ namespace WebShop.API.Extensions
 		{
 			var cartProduct = new CartProduct()
 			{
-				Id = cartProductDto.ProductId,
 				Quantity = cartProductDto.Quantity,
 				User = user,
 				Product = product
@@ -46,6 +45,15 @@ namespace WebShop.API.Extensions
 				.ToList();
 
 			return cartProducts;
+		}
+		public static List<OrderedProduct> ToOrderedProducts(this List<CartProduct> cartProducts)
+		{
+			var orderedProducts = cartProducts.Select(cartProduct => new OrderedProduct()
+			{
+				Quantity = cartProduct.Quantity,
+				Product = cartProduct.Product
+			}).ToList();
+			return orderedProducts;
 		}
 	}
 

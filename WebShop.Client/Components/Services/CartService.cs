@@ -85,17 +85,15 @@ namespace WebShop.Client.Components.Services
 		private CartDTO? _cart;
 		public int CartItemCount => _cart?.CartProductDtos.Sum(cp => cp.Quantity) ?? 0;
 		public event Action<int>? OnCartUpdated;
-		private ICartRepository _cartRepository;
+		private LocalStorageCartRepository _cartRepository;
+		private BackEndCartRepository _backEndCartRepository;
 		private IProductService _productService;
 
-		public CartService(ICartRepository cartRepository, IProductService productService)
+		public CartService(LocalStorageCartRepository cartRepository, BackEndCartRepository backEndCartRepository, IProductService productService)
 		{
 			_cartRepository = cartRepository;
 			_productService = productService;
-		}
-		public void SetRepository(ICartRepository cartRepository)
-		{
-			_cartRepository = cartRepository;
+			_backEndCartRepository = backEndCartRepository;
 		}
 		public async Task<CartDTO> GetCart()
 		{
@@ -158,6 +156,8 @@ namespace WebShop.Client.Components.Services
 		public async Task ClearCart()
 		{
 			await _cartRepository.ClearCart();
+			_cart = new CartDTO();
+
 		}
 		public async Task<List<CartProductDisplayDTO>> GetCartProductDisplayDtos()
 		{
@@ -178,6 +178,11 @@ namespace WebShop.Client.Components.Services
 				.ToList();
 
 			return cartProductDisplayDtos;
+		}
+		public async Task SyncCartToDatabase()
+		{
+			_cart = await GetCart();
+			await _backEndCartRepository.SaveCart(_cart); // Save to backend
 		}
 	}
 }

@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +25,7 @@ namespace API
 				options.Cookie.Name = ".AspNetCore.Identity.Application";
 				options.Cookie.HttpOnly = true;
 				options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-				options.Cookie.SameSite = SameSiteMode.Lax;
+				options.Cookie.SameSite = SameSiteMode.None;
 				options.ExpireTimeSpan = TimeSpan.FromHours(7);
 				options.SlidingExpiration = true;
 				options.LoginPath = "/Account/login";

@@ -39,7 +39,7 @@
 		var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 		if (authState.User.Identity is not { IsAuthenticated: true })
 		{
-			StateHasChanged(); // Refresh UI if authentication is lost
+			StateHasChanged(); 
 		}
 	}
 

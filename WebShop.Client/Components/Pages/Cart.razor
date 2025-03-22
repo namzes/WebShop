@@ -52,6 +52,9 @@
 	private async Task ClearCart()
 	{
 		await CartService.ClearCart();
+		await CartService.SyncCartToDatabase();
+		Products = await CartService.GetCartProductDisplayDtos();
+		await InvokeAsync(StateHasChanged);
 	}
 	private void CheckoutCart()
 	{

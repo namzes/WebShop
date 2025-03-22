@@ -35,6 +35,7 @@
 		if (user?.Identity?.IsAuthenticated == true)
 		{ 
 			await CartService.AddToCart(Product);
+			await CartService.SyncCartToDatabase();
 		}
 		else
 		{

@@ -1,43 +1,64 @@
 ﻿@page "/checkout"
+@using System.Diagnostics.Eventing.Reader
+@using WebShop.Client.Components.Features
 @using WebShop.Client.Components.Services
 @using Webshop.Shared.Models
 @inject CartService CartService
 @inject WebshopAuthenticationStateProvider AuthStateProvider
 @inject NavigationManager NavManager
+@inject IOrderService OrderService
+@rendermode InteractiveServer
 
-<div class="checkout-container">
-	<h2>Checkout</h2>
-	<div class="cart-summary">
-		<h3>Order Summary</h3>
-		@foreach (var product in Products)
-		{
-			
-		}
-		<div class="total-cost">
-			<h3>Total: @TotalPrice.ToString("C")</h3>
+@if (!_isOrderPlaced)
+{
+	<div class="checkout-container">
+		<h2>Checkout</h2>
+		<div class="cart-summary">
+			<h3>Order Summary</h3>
+			@foreach (var product in Products)
+			{
+				<CheckoutCartProduct Product="product"></CheckoutCartProduct>
+			}
+			<div class="total-cost">
+				<h3>Total: @TotalPrice.ToString("C")</h3>
+			</div>
 		</div>
+
+		<form class="checkout-form">
+			<h3>Shipping Information</h3>
+			<label>First Name</label>
+			<input type="text" required @bind="_fname" />
+
+			<label>Last Name</label>
+			<input type="text" required @bind="_lname" />
+
+			<label>Address</label>
+			<input type="text" required @bind="_address" />
+
+			<label>City</label>
+			<input type="text" required @bind="_city" />
+
+			<button type="submit" class="checkout-button" @onclick="OrderProducts" @onclick:preventDefault="true">Place Order</button>
+		</form>
 	</div>
-    
-	<form class="checkout-form">
-		<h3>Shipping Information</h3>
-		<label>First Name</label>
-		<input type="text" required />
-        
-		<label>Last Name</label>
-		<input type="text" required />
-        
-		<label>Address</label>
-		<input type="text" required />
-        
-		<label>City</label>
-		<input type="text" required />
-        
-		<button type="submit" class="checkout-button">Place Order</button>
-	</form>
-</div>
+}
+else
+{
+	<div class="order-confirmation">
+		<h3>Order Placed</h3>
+		<p>Your order has been placed successfully!</p>
+	</div>
+}
+
 
 @code {
 	public required List<CartProductDisplayDTO> Products = new();
+	private string _fname = string.Empty;
+	private string _lname = string.Empty;
+	private string _address = string.Empty;
+	private string _city = string.Empty;
+	private bool _isOrderPlaced = false;
+
 	public decimal TotalPrice => Products.Sum(p => p.Price * p.Quantity);
 
 	protected override async Task OnInitializedAsync()
@@ -57,5 +78,23 @@
 			Products = await CartService.GetCartProductDisplayDtos();
 			await InvokeAsync(StateHasChanged);
 		}
+	}
+
+	private ShippingDetailsDTO CreateShippingDetails()
+	{
+		return new ShippingDetailsDTO()
+		{
+			FirstName = _fname,
+			LastName = _lname,
+			Address = _address,
+			City = _city
+		};
+	}
+
+	private async Task OrderProducts()
+	{
+		await CartService.SyncCartToDatabase();
+		_isOrderPlaced = await OrderService.PlaceOrder(CreateShippingDetails());
+		await InvokeAsync(StateHasChanged);
 	}
 }

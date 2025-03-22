@@ -25,8 +25,8 @@
 
 		if (responseMessage.IsSuccessStatusCode)
 		{
-			
 			await CartService.GetCart();
+			await CartService.SyncCartToDatabase();
 			NavigationManager.NavigateTo("/");
 		}
 		else

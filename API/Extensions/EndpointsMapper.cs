@@ -120,14 +120,78 @@ namespace WebShop.API.Extensions
 					return Results.BadRequest("No valid cart products created.");
 				}
 
-				await dbContext.CartProducts.AddRangeAsync(cartProducts);
+				foreach (var cartProduct in cartProducts)
+				{
+					var existingCartProduct = await dbContext.CartProducts
+						.FirstOrDefaultAsync(cp => cp.Product.Id == cartProduct.Product.Id && cp.User.Id == user.Id);
+
+					if (existingCartProduct != null)
+					{
+						
+						existingCartProduct.Quantity += cartProduct.Quantity;
+						dbContext.CartProducts.Update(existingCartProduct);  
+					}
+					else
+					{
+					
+						await dbContext.CartProducts.AddAsync(cartProduct);
+					}
+				}
 				await dbContext.SaveChangesAsync();
 
 				return Results.Ok();
 
+			}).RequireAuthorization();
+
+			app.MapPost("/api/Order", async (HttpContext httpContext, [FromServices] WebShopDbContext dbContext, [FromBody] OrderRequestDTO orderRequest) =>
+			{
+				var userId = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+				if (string.IsNullOrEmpty(userId))
+				{
+					return Results.Unauthorized();
+				}
+
+				var user = await dbContext.Users.FindAsync(userId);
+				if (user == null)
+				{
+					return Results.NotFound("User not found.");
+				}
+				var cartProducts = await dbContext.CartProducts.Where(cp => cp.User.Id == user.Id).Include(cp => cp.Product).ToListAsync();
+
+				if (!cartProducts.Any())
+				{
+					return Results.BadRequest("No valid cart products created.");
+				}
+
+				var productIds = cartProducts.Select(cp => cp.Id).ToList();
+				var products = await dbContext.Products.Where(p => productIds.Contains(p.Id)).ToListAsync();
+
+				foreach (var product in products)
+				{
+					var cartProduct = cartProducts.FirstOrDefault(cp => cp.Product.Id == product.Id);
+					if (cartProduct != null)
+					{
+						product.Stock -= cartProduct.Quantity;
+					}
+				}
+
+				dbContext.CartProducts.RemoveRange(cartProducts);
+
+				var order = new Order()
+				{
+					User = user,
+					ShippingAddress = orderRequest.ShippingDetails.Address,
+					City = orderRequest.ShippingDetails.City,
+					OrderedProducts = cartProducts.ToOrderedProducts()
+				};
+
+				await dbContext.Orders.AddAsync(order);
+				await dbContext.SaveChangesAsync();
+				return Results.Ok();
 			}).RequireAuthorization();
 		}
 	}
 }
 	
 	
+

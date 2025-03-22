@@ -34,6 +34,14 @@ namespace WebShop.API.Properties
 		public required string ShippingAddress { get; set; }
 		[StringLength(200)]
 		public required string City { get; set; }
-		public List<CartProduct> OrderedProducts { get; set; } = new();
+		public List<OrderedProduct>? OrderedProducts { get; set; }
+	}
+
+	public class OrderedProduct
+	{
+		public int Id { get; set; }
+		public int Quantity { get; set; }
+		public required Product Product { get; set; }
+
 	}
 }

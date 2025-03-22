@@ -10,18 +10,6 @@
 		public int ProductId { get; set; }
 		public int Quantity { get; set; }
 
-		public CartProductDisplayDTO ToCartProductDisplayDto(ProductDTO productDto, CartProductDTO cartProductDto)
-		{
-			return new CartProductDisplayDTO
-			{
-				Id = productDto.Id,
-				Name = productDto.Name,
-				Description = productDto.Description,
-				Price = productDto.Price,
-				ImageUrl = productDto.ImageUrl,
-				Quantity = cartProductDto.Quantity
-			};
-		}
 	}
 	public class CartProductDisplayDTO
 	{

@@ -37,18 +37,32 @@ public class Program
 		builder.Services.AddAuthorization();
 
 		builder.Services.AddCascadingAuthenticationState();
-		builder.Services.AddHttpClient("MinimalApi", client => client.BaseAddress = new Uri("https://localhost:7119"))
+		builder.Services.AddHttpContextAccessor();
+
+		builder.Services.AddHttpClient("MinimalApi", (sp, client) => {
+				var httpContextAccessor = sp.GetRequiredService<IHttpContextAccessor>();
+				client.BaseAddress = new Uri("https://localhost:7119");
+			var cookieHeader = httpContextAccessor.HttpContext?.Request.Headers["Cookie"];
+			if (!string.IsNullOrEmpty(cookieHeader))
+			{
+				client.DefaultRequestHeaders.Add("Cookie", cookieHeader.ToString());
+			}
+
+		})
 			.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler()
-			{ 
+			{
 				UseCookies = true,
 				CookieContainer = new CookieContainer()
 			});
-		builder.Services.AddHttpContextAccessor();
+		
 		builder.Services.AddScoped<WebshopAuthenticationStateProvider>();
 		builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<WebshopAuthenticationStateProvider>());
-		builder.Services.AddScoped<ICartRepository, LocalStorageCartRepository>();
+		builder.Services.AddScoped<LocalStorageCartRepository>();
+		builder.Services.AddScoped<BackEndCartRepository>();
 		builder.Services.AddScoped<IProductService, ApiProductService>();
+		builder.Services.AddScoped<IOrderService, OrderService>();
 		builder.Services.AddScoped<CartService>();
+		
 
 		builder.Services.AddBlazoredLocalStorage();
 
