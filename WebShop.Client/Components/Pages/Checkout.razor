@@ -47,12 +47,23 @@ else
 	<div class="order-confirmation">
 		<h3>Order Placed</h3>
 		<p>Your order has been placed successfully!</p>
+		<p><strong>Name:</strong> @_fname @_lname</p>
+		<p><strong>Address:</strong> @_address, @_city</p>
+
+		<h4>Ordered Products</h4>
+		<ul>
+			@foreach (var orderedProduct in OrderedProducts)
+			{
+				<li>@orderedProduct.Name (Qty: @orderedProduct.Quantity)</li>
+			}
+		</ul>
 	</div>
 }
 
 
 @code {
-	public required List<CartProductDisplayDTO> Products = new();
+	public required List<CartProductDisplayDTO> Products;
+	public required List<CartProductDisplayDTO> OrderedProducts;
 	private string _fname = string.Empty;
 	private string _lname = string.Empty;
 	private string _address = string.Empty;
@@ -93,6 +104,8 @@ else
 
 	private async Task OrderProducts()
 	{
+		OrderedProducts = new List<CartProductDisplayDTO>(Products);
+
 		await CartService.SyncCartToDatabase();
 		_isOrderPlaced = await OrderService.PlaceOrder(CreateShippingDetails());
 		await InvokeAsync(StateHasChanged);

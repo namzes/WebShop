@@ -8,7 +8,7 @@
 	<img src="@Product.ImageUrl" alt="@Product.Name" class="product-image" @onclick="NavigateToProductPage"/>
 	<div class="product-info-container">
 		<h3>@Product.Name</h3>
-		<p>@Product.Price.ToString("C")</p>
+		<CurrencyDisplay Price="@Product.Price"></CurrencyDisplay>
 		<div class="quantity-controls">
 			<button @onclick="DecreaseQuantity" class="quantity-button">-</button>
 			<span>Qty: @Product.Quantity</span>

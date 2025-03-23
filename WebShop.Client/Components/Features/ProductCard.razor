@@ -11,7 +11,7 @@
 		<img src="@Product.ImageUrl" alt="name" />
 		<div class="product-info-container">
 			<h3>@Product.Name</h3>
-			<p>@Product.Price.ToString("C")</p>
+			<CurrencyDisplay Price="@Product.Price"></CurrencyDisplay>
 		</div>
 	</div>
 	<button class="cart-add-button" @onclick="AddToCart">Add to Cart</button>

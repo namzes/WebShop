@@ -1,0 +1,48 @@
+﻿@using WebShop.Client.Components.Services
+@rendermode InteractiveServer
+@inject CurrencyService CurrencyService
+
+<p>@FormattedPrice</p>
+
+@code {
+	[Parameter] public decimal Price { get; set; }
+	private decimal ConvertedPrice { get; set; }
+	private string FormattedPrice => ConvertedPrice.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture(CurrencyService.SelectedCulture));
+
+	protected override async Task OnInitializedAsync()
+	{
+		CurrencyService.OnCurrencyChanged += OnCurrencyChanged;
+		await UpdatePriceAsync();
+	}
+
+	private async Task UpdatePriceAsync()
+	{
+		try
+		{
+			await CurrencyService.GetExchangeRateAsync();
+
+			var exchangeRate = CurrencyService.ExchangeRate;
+
+			if (exchangeRate != 1)
+			{
+				ConvertedPrice = Price * exchangeRate;
+			}
+			else
+			{
+				ConvertedPrice = Price; 
+			}
+		}
+		catch (Exception)
+		{
+			ConvertedPrice = Price; 
+		}
+	}
+	private async void OnCurrencyChanged(string selectedCurrency)
+	{
+		await UpdatePriceAsync();
+	}
+	public void Dispose()
+	{
+		CurrencyService.OnCurrencyChanged -= OnCurrencyChanged;
+	}
+}

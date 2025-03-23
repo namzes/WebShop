@@ -27,16 +27,18 @@ h1 {
     gap: 20px;
     padding: 20px;
 }
-
-.header {
+header {
     grid-area: header;
     background-color: #28a745;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Ensures left and right sections are separated */
     align-items: center;
     padding: 0 20px;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.site-title {
+    flex-grow: 1;
 }
 
 .sidebar {
@@ -54,6 +56,11 @@ h1 {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
     overflow-y: auto;
+}
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px; 
 }
 
 /* Responsive for larger screens */

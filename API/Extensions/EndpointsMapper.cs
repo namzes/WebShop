@@ -13,13 +13,11 @@ namespace WebShop.API.Extensions
 		{
 			app.MapGet("/api/Products", async (WebShopDbContext dbContext) =>
 			{
-
 				var products = await dbContext.Products.ToListAsync();
 				return Results.Ok(products.ToProductDTOs());
 			});
 			app.MapGet("/api/Products/{id}", async (int id, WebShopDbContext dbContext) =>
 			{
-
 				var product = await dbContext.Products.FindAsync(id);
 				if (product == null)
 				{
@@ -32,7 +30,6 @@ namespace WebShop.API.Extensions
 				try
 				{
 					var userId = userPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
 
 					if (string.IsNullOrEmpty(userId))
 					{
@@ -51,9 +48,7 @@ namespace WebShop.API.Extensions
 					{
 						Id = user.Id,
 						Email = user.Email ?? "default@email.com",
-
 					};
-
 
 					return Results.Ok(userDto);
 				}
@@ -97,7 +92,7 @@ namespace WebShop.API.Extensions
 
 				}).RequireAuthorization();
 
-			app.MapPost("/api/Cart", async ( HttpContext httpContext,  WebShopDbContext dbContext, CartDTO cartDto) =>
+			app.MapPost("/api/Cart", async (HttpContext httpContext, WebShopDbContext dbContext, CartDTO cartDto) =>
 			{
 				var userId = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 				if (string.IsNullOrEmpty(userId))
@@ -127,13 +122,11 @@ namespace WebShop.API.Extensions
 
 					if (existingCartProduct != null)
 					{
-						
 						existingCartProduct.Quantity += cartProduct.Quantity;
-						dbContext.CartProducts.Update(existingCartProduct);  
+						dbContext.CartProducts.Update(existingCartProduct);
 					}
 					else
 					{
-					
 						await dbContext.CartProducts.AddAsync(cartProduct);
 					}
 				}
@@ -189,9 +182,36 @@ namespace WebShop.API.Extensions
 				await dbContext.SaveChangesAsync();
 				return Results.Ok();
 			}).RequireAuthorization();
+
+			app.MapGet("/api/ExchangeRate/{currencyPair}", async (string currencyPair, [FromServices] IHttpClientFactory httpClientFactory) =>
+			{
+				var apiUrl = $"https://api.api-ninjas.com/v1/exchangerate?pair={currencyPair}";
+
+				string? apiKey = app.Configuration.GetValue<string>("ApiSettings:ApiKey");
+
+				if (apiKey == null)
+				{
+					return Results.BadRequest("Api key not found.");
+				}
+
+				using (var client = httpClientFactory.CreateClient())
+				{
+					client.DefaultRequestHeaders.Add("X-Api-Key", apiKey);
+
+					try
+					{
+						var response = await client.GetStringAsync(apiUrl);
+						return Results.Ok(response);
+					}
+					catch (Exception ex)
+					{
+						return Results.Problem($"An error occurred: {ex.Message}", statusCode: 500);
+					}
+				}
+			});
 		}
 	}
 }
-	
-	
+
+
 

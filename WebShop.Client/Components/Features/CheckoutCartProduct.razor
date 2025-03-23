@@ -5,7 +5,7 @@
 	<img src="@Product.ImageUrl" alt="@Product.Name" class="cart-product-image" />
 	<div class="cart-item-info">
 		<h4>@Product.Name</h4>
-		<p>@Product.Price.ToString("C")</p>
+		<CurrencyDisplay Price="@Product.Price"></CurrencyDisplay>
 		<p>Qty: @Product.Quantity</p>
 	</div>
 </div>

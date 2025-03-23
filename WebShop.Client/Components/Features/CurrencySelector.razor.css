@@ -1,0 +1,25 @@
+﻿.currency-selector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 5px 10px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    right: 100px;
+}
+
+    .currency-selector label {
+        font-weight: bold;
+        margin-bottom: 3px;
+    }
+
+    .currency-selector select {
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        cursor: pointer;
+    }

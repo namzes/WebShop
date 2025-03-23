@@ -70,3 +70,107 @@ body {
         background-color: #45a049;
     }
 
+.order-confirmation {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin: 20px auto;
+    max-width: 400px; 
+}
+
+    .order-confirmation h3 {
+        color: #2c3e50;
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .order-confirmation p {
+        font-size: 14px;
+        color: #34495e;
+        line-height: 1.5;
+        margin-bottom: 8px;
+    }
+
+    .order-confirmation strong {
+        color: #2980b9;
+    }
+
+    .order-confirmation h4 {
+        color: #16a085;
+        font-size: 18px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    .order-confirmation ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .order-confirmation li {
+        background-color: #ecf0f1;
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+    }
+
+        .order-confirmation li:hover {
+            background-color: #bdc3c7;
+            transition: background-color 0.3s;
+        }
+
+
+@media (min-width: 600px) {
+    .order-confirmation {
+        width: 80%; 
+        max-width: 600px;
+    }
+
+        .order-confirmation h3 {
+            font-size: 24px;
+        }
+
+        .order-confirmation p {
+            font-size: 16px;
+        }
+
+        .order-confirmation h4 {
+            font-size: 20px;
+        }
+
+        .order-confirmation li {
+            font-size: 16px;
+        }
+}
+
+
+@media (min-width: 1024px) {
+    .order-confirmation {
+        width: 60%; 
+        max-width: 800px;
+    }
+
+        .order-confirmation h3 {
+            font-size: 26px;
+        }
+
+        .order-confirmation p {
+            font-size: 18px;
+        }
+
+        .order-confirmation h4 {
+            font-size: 22px;
+        }
+
+        .order-confirmation li {
+            font-size: 18px;
+        }
+}
+

@@ -97,11 +97,13 @@ namespace WebShop.Client.Components.Services
 		}
 		public async Task<CartDTO> GetCart()
 		{
-			if (_cart != null)
+			_cart = await _backEndCartRepository.GetCart();
+
+			if (_cart == null || !_cart.CartProductDtos.Any())
 			{
-				return _cart;
+				_cart = await _cartRepository.GetCart();
 			}
-			_cart = await _cartRepository.GetCart();
+			await _cartRepository.SaveCart(_cart);
 			return _cart;
 		}
 

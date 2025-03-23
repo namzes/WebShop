@@ -36,7 +36,7 @@ namespace API
 				.AddDefaultTokenProviders().AddApiEndpoints();
 
 			var connectionString = builder.Configuration.GetConnectionString("SqlServerConnection");
-
+			builder.Services.AddHttpClient();
 			builder.Services.AddDbContext<WebShopDbContext>(opt =>
 				opt.UseSqlServer(connectionString).LogTo(Console.WriteLine, LogLevel.Information));
 
@@ -57,7 +57,9 @@ namespace API
 			{
 				app.UseSwagger();
 				app.UseSwaggerUI();
+
 			}
+
 			app.UseAuthentication();
 			app.UseAuthorization();
 

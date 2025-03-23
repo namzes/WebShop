@@ -1,0 +1,31 @@
+﻿@using WebShop.Client.Components.Services
+@inject CurrencyService CurrencyService
+@rendermode InteractiveServer
+
+<div class="currency-selector">
+	<label for="currency">Select Currency:</label>
+	<select id="currency" @onchange="UpdateCurrency">
+		<option value="SEK">SEK</option>
+		<option value="USD">USD</option>
+		<option value="EUR">EUR</option>
+		<option value="GBP">GBP</option>
+		<option value="AUD">AUD</option>
+		<option value="CAD">CAD</option>
+		<option value="JPY">JPY</option>
+		<option value="CHF">CHF</option>
+		<option value="NOK">NOK</option>
+		<option value="DKK">DKK</option>
+		<option value="INR">INR</option>
+		<option value="CNY">CNY</option>
+		<option value="MXN">MXN</option>
+	</select>
+</div>
+
+@code {
+	private void UpdateCurrency(ChangeEventArgs e)
+	{
+		string selectedCurrency = e.Value?.ToString() ?? "SEK";
+		CurrencyService.SetCurrency(selectedCurrency); 
+		StateHasChanged();
+	}
+}

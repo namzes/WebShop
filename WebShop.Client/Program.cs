@@ -62,6 +62,7 @@ public class Program
 		builder.Services.AddScoped<IProductService, ApiProductService>();
 		builder.Services.AddScoped<IOrderService, OrderService>();
 		builder.Services.AddScoped<CartService>();
+		builder.Services.AddScoped<CurrencyService>();
 		
 
 		builder.Services.AddBlazoredLocalStorage();
