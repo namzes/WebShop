@@ -13,6 +13,7 @@
 	{
 		CurrencyService.OnCurrencyChanged += OnCurrencyChanged;
 		await UpdatePriceAsync();
+		
 	}
 
 	private async Task UpdatePriceAsync()
@@ -31,15 +32,20 @@
 			{
 				ConvertedPrice = Price; 
 			}
+			StateHasChanged();
 		}
 		catch (Exception)
 		{
 			ConvertedPrice = Price; 
+			StateHasChanged();
 		}
+
+		
 	}
 	private async void OnCurrencyChanged(string selectedCurrency)
 	{
 		await UpdatePriceAsync();
+		
 	}
 	public void Dispose()
 	{

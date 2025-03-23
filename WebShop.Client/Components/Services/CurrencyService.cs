@@ -1,4 +1,5 @@
-﻿using Webshop.Shared.Models;
+﻿using System.Text.Json;
+using Webshop.Shared.Models;
 
 namespace WebShop.Client.Components.Services
 {
@@ -54,19 +55,26 @@ namespace WebShop.Client.Components.Services
 			{
 				var client = _httpClientFactory.CreateClient("MinimalApi");
 				var response = await client.GetStringAsync($"/api/ExchangeRate/{currencyPair}");
+				var unescapedResponse = JsonSerializer.Deserialize<string>(response);
+				if (unescapedResponse != null)
+				{
+					var exchangeRateResponse = JsonSerializer.Deserialize<ExchangeRateResponse>(unescapedResponse);
+					if (exchangeRateResponse != null)
+					{
+						_exchangerate = exchangeRateResponse.ConversionRate;
+						
+					}
+					else
+					{
+						_exchangerate = 1;
+					}
+				}
 
-				if (decimal.TryParse(response, out var exchangeRate))
-				{
-					_exchangerate = exchangeRate;
-				}
-				else
-				{
-					_exchangerate = 1;
-				}
 			}
+				
 			catch (Exception)
 			{
-				_exchangerate = 1; 
+				_exchangerate = 1;
 			}
 		}
 		public void SetCurrency(string currency)

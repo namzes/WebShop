@@ -185,9 +185,11 @@ namespace WebShop.API.Extensions
 
 			app.MapGet("/api/ExchangeRate/{currencyPair}", async (string currencyPair, [FromServices] IHttpClientFactory httpClientFactory) =>
 			{
-				var apiUrl = $"https://api.api-ninjas.com/v1/exchangerate?pair={currencyPair}";
-
+				string[] currencies = currencyPair.Split('_');
+				string fromCurrency = currencies[0];
+				string toCurrency = currencies[1];
 				string? apiKey = app.Configuration.GetValue<string>("ApiSettings:ApiKey");
+				var apiUrl = $"https://v6.exchangerate-api.com/v6/{apiKey}/pair/{fromCurrency}/{toCurrency}";
 
 				if (apiKey == null)
 				{
@@ -196,8 +198,6 @@ namespace WebShop.API.Extensions
 
 				using (var client = httpClientFactory.CreateClient())
 				{
-					client.DefaultRequestHeaders.Add("X-Api-Key", apiKey);
-
 					try
 					{
 						var response = await client.GetStringAsync(apiUrl);
