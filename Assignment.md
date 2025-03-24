@@ -1,75 +1,64 @@
-## ✅ = Klart | ⬜ = Ej klart
+# G + VG
+- [x] Använd mallen Blazor Web App.
+- [x] Produkter
+    - [x] Innehåller information som: ID, Namn, Beskrivning, Bild-URL, Pris.
+    - [x] Minst 10 produkter.
+    - [x] En REST-API ska användas för att få åtkomst till produkterna.
+- [x] Startsida
+    - [x] Startsida (page) med en lista av produkter (komponenter).
+    - [x] Produkterna visas upp med hjälp av Razor-komponenter på startsidan.
+- [x] Produktkomponent
+    - [x] Komponenten ska inte visa all information om produkten, utan endast en överblick.
+    - [x] Komponenten ska innehålla en knapp som lägger till produkten i en varukorg.
+    - [x] Om man klickar på produkt-komponenten ska man komma till en produktsida (page) där all information om den specika produkten visas.
+- [x] Produktsida
+    - [x] På produktsidan ska det också vara möjligt att lägga till produkten i varukorgen.
+    - [x] Man ska kunna navigera till produktsidan via sökfältet i webbläsaren (t.ex. `localhost/product/1`).
+- [x] Varukorg
+    - [x] Sidan ska visa vad som finns i varukorgen.
+    - [x] Man ska kunna navigera till varukorgen (page) via en knapp/länk.
+    - [x] Varukorgen ska innehålla ett formulär för att fylla i adressuppgifter.
+    - [x] När formuläret skickas in ska användaren komma till en bekräftelsesida (page) där informationen om beställningen visas: Vilka produkter som köpts. Namn och adress från formuläret. När beställningen är klar ska varukorgen tömmas.
+- HTML/CSS/Blazor
+    - [x] Minst 2 komponenter (inte pages/layout) ska användas.
+    - [ ] HTML ska användas på rätt sätt och valideras.
+    - [x] Semantiska element när möjligt.
+    - [x] CSS ska vara tydligt strukturerad och bidra till UI/UX.
+    - [x] Appen ska vara responsiv och anpassad till mobile och desktop.
+    - [x] Inget CSS ramverk (bootstrap, tailwind etc.) får användas.
 
----
+# G, men inte VG
+- Räcker med ETT projekt.
+- All data i G-delen *får* vara statisk (hårdkodad).
+- [x] Varukorgen ska lagras i `localStorage` (tillåtet även i VG, men ej krav).
 
-## 🛍️ Webbutikens funktioner
-
-- [x] Applikationen har en startsida som visar en lista av produkter.
-- [x] Applikationen innehåller minst 10 produkter.
-- [x] Varje produkt har ett unikt ID, namn, beskrivning, bild-URL och pris.
-- [x] Produkterna visas upp med hjälp av Razor-komponenter på startsidan.
-- [x] Produktkomponenterna visar endast en översikt av produktdetaljer, inte all information.
-- [x] Varje produktkomponent innehåller en knapp för att lägga till produkten i varukorgen.
-- [x] Klick på en produktkomponent leder till en produktsida med mer information.
-- [x] Produktsidan visar alla detaljer för den valda produkten.
-- [x] På produktsidan finns en knapp för att lägga till produkten i varukorgen.
-- [x] Man kan navigera till en produktsida via webbadressen (t.ex. `localhost/product/1`).
-- [x] En varukorgssida är tillgänglig via en knapp eller länk.
-- [x] Varukorgssidan visar alla produkter som lagts i varukorgen.
-- [ ] Varukorgssidan innehåller ett formulär för att fylla i adressuppgifter.
-- [ ] När formuläret skickas in omdirigeras användaren till en bekräftelsesida.
-- [ ] Bekräftelsesidan visar köpta produkter samt användarens namn och adressuppgifter.
-- [ ] Varukorgen töms efter att köpet är genomfört.
-
----
-
-## 🛠️ Kodstruktur och uppdelning
-
-- [x] Minst två komponenter används (förutom sidor och Layout-komponenter).
-- [ ] HTML används korrekt och valideras.
-- [ ] Semantiska HTML-element används där det är möjligt.
-- [ ] CSS är tydligt strukturerad och bidrar till en bra användarupplevelse.
-- [x] Applikationen är responsiv och anpassad för både mobil och desktop.
-- [x] Inga CSS-ramverk (t.ex. Bootstrap, Tailwind) används.
-
----
-
-## 🏆 Krav för Väl Godkänt
-
-- [x] Minst fyra komponenter används (förutom sidor och Layout-komponenter).
-- [x] Produkternas kvantiteter hanteras i systemet.
-- [ ] Produkter kan bli slutsålda.
-- [ ] Produktkomponenterna ändrar utseende när en produkt är slutsåld eller på rea.
-- [ ] Produktsidan visar priset i olika valutor med hjälp av API:et https://apininjas.com/api/exchangerate.
-- [ ] API-nyckeln för valutakonvertering är säker och kan inte nås av slutanvändaren.
-- [x] En databas och ett REST API används för att lagra och hämta produktdata.
-- [x] Produktdatan lagras i databasen (dock inte valutakurserna).
-
----
-
-## 🔐 Användarhantering och persistens
-
-- [x] Användare kan registrera ett konto med användarnamn och lösenord.
-- [x] Användare kan logga in med sitt användarnamn och lösenord.
-- [x] Varukorgen kommer ihåg vilka produkter som användaren har lagt till vid inloggning.
-- [ ] Ett köp kan inte genomföras utan att användaren är inloggad.
-- [ ] Informationen hämtas från servern via ett HTTP-anrop till en API-endpoint.
-- [x] Delade klasser används i både frontend och backend.
-
----
-
-## 📁 Projektstruktur
-
-- [x] Applikationen är uppdelad i tre projekt:
-  - `WebshopFrontend`: UI, sidor, komponenter
-  - `WebshopBackend`: API-endpoints, affärslogik
-  - `WebshopShared`: Delade modeller, DTOs, valideringslogik
-
----
-
-## 📝 Dokumentation
-
-- [x] En fil `Analysis.md` finns i projektets rotkatalog.
-- [ ] `Analysis.md` dokumenterar hur .NET Core:s felsökningsverktyg användes för att identifiera och åtgärda minst en bugg.
-- [ ] Felsökningsprocessen innehåller en förklaring samt en reflektion.
-- [x] En fil `Assignment.md` finns som listar alla kriterier och har kryssrutor för att markera avklarade uppgifter.
+# VG
+- [x] ... G-kriterierna ska uppfyllas.
+- Blazor
+    - [x] Minst 4 komponenter (inte pages/layout) ska designas och användas.
+- Produkter
+    - [x] Lagras i databas (ej valutakursen).
+    - [x] Produkter ska ha kvantiteter. De ska kunna bli slutsålda.
+    - [ ] Produkter ska kunna vara på rea.
+- Produktkomponent
+    - [ ] Ändra utseende om...
+        - [ ] varan är slut.
+        - [ ] varan är på rea.
+- På produktsidan ska produktens pris kunna visas i olika valutor med hjälp av API:et https://api-ninjas.com/api/exchangerate.
+    - [x] API:et måste användas på ett sätt som gör att slutanvändaren inte kan komma åt API-nyckeln.
+- Konton
+    - [x] Kontoregistrering användarnamn och lösenord.
+    - [x] Inloggning med användarnamn och lösenord.
+    - [x] Sidan ska komma ihåg vad en användare har lagt i sin varukorg när den loggar in nästa gång.
+    - [x] Köp kan endast slutföras som inloggad.
+- Struktur
+    - [x] Delade klasser ska kunna användas från både Frontend och Backend.
+    - [x] Dela upp din app i 3 projekt, exempelvis:
+        - Frontend
+            - UI, sidor, komponenter.
+        - Backend
+            - API-endpoints och affärslogik.
+        - Shared
+            - Ett separat bibliotek för exempelvis delade modeller, DTO:er och gemensam valideringslogik.
+- [ ] Dokumentera och demonstrera hur du använt .NET Cores felsökningsverktyg och loggningssystem för att identifiera, analysera och åtgärda minst en specifik bugg i applikationen, inklusive en kort reflektion över bugghanteringsprocessen. 
+- [x] Dokumentera i filen `Analysis.md` i projektets rot (jämte `.sln`-filen).

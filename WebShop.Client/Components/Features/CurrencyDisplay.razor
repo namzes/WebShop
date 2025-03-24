@@ -13,34 +13,18 @@
 	{
 		CurrencyService.OnCurrencyChanged += OnCurrencyChanged;
 		await UpdatePriceAsync();
-		
 	}
 
 	private async Task UpdatePriceAsync()
 	{
-		try
-		{
-			await CurrencyService.GetExchangeRateAsync();
-
-			var exchangeRate = CurrencyService.ExchangeRate;
-
-			if (exchangeRate != 1)
-			{
-				ConvertedPrice = Price * exchangeRate;
-			}
-			else
-			{
-				ConvertedPrice = Price; 
-			}
-			StateHasChanged();
-		}
-		catch (Exception)
-		{
-			ConvertedPrice = Price; 
-			StateHasChanged();
-		}
-
 		
+			var exchangeRate = CurrencyService.ExchangeRate;
+			ConvertedPrice = Price * exchangeRate;
+
+			await Task.CompletedTask;
+
+			StateHasChanged();
+
 	}
 	private async void OnCurrencyChanged(string selectedCurrency)
 	{

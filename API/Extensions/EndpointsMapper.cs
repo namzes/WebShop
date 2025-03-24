@@ -69,7 +69,7 @@ namespace WebShop.API.Extensions
 					return Results.Unauthorized();
 				}
 
-				var cartProducts = await dbContext.CartProducts.Where(cp => cp.User.Id == userId).ToListAsync();
+				var cartProducts = await dbContext.CartProducts.Where(cp => cp.User.Id == userId).Include(cp => cp.Product).ToListAsync();
 
 				return Results.Ok(cartProducts.Any() ? cartProducts.ToCartProductDTOList() : new List<CartProductDTO>());
 			}).RequireAuthorization();
@@ -122,12 +122,23 @@ namespace WebShop.API.Extensions
 
 					if (existingCartProduct != null)
 					{
-						existingCartProduct.Quantity += cartProduct.Quantity;
-						dbContext.CartProducts.Update(existingCartProduct);
+						existingCartProduct.Quantity = cartProduct.Quantity;
+
+						if (existingCartProduct.Quantity <= 0)
+						{
+							dbContext.CartProducts.Remove(existingCartProduct);
+						}
+						else
+						{
+							dbContext.CartProducts.Update(existingCartProduct);
+						}
 					}
 					else
 					{
-						await dbContext.CartProducts.AddAsync(cartProduct);
+						if (cartProduct.Quantity > 0)
+						{
+							await dbContext.CartProducts.AddAsync(cartProduct);
+						}
 					}
 				}
 				await dbContext.SaveChangesAsync();
@@ -135,6 +146,95 @@ namespace WebShop.API.Extensions
 				return Results.Ok();
 
 			}).RequireAuthorization();
+
+			app.MapDelete("/api/DeleteCart", async (HttpContext httpContext, WebShopDbContext dbContext) =>
+			{
+				var userId = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
+					?.Value;
+				if (string.IsNullOrEmpty(userId))
+				{
+					return Results.Unauthorized();
+				}
+
+				var user = await dbContext.Users.FindAsync(userId);
+				if (user == null)
+				{
+					return Results.NotFound("User not found.");
+				}
+
+				var cartProducts = await dbContext.CartProducts.Where(cp => cp.User.Id == user.Id).ToListAsync();
+
+				if (!cartProducts.Any())
+				{
+					return Results.NotFound("Cart is already empty.");
+				}
+				
+				dbContext.CartProducts.RemoveRange(cartProducts);
+
+				await dbContext.SaveChangesAsync();
+
+				return Results.Ok();
+
+			}).RequireAuthorization();
+
+			//app.MapPut("/api/UpdateCart",
+			//	async (HttpContext httpContext, WebShopDbContext dbContext, CartDTO cart) =>
+			//	{
+			//		var userId = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
+			//			?.Value;
+			//		if (string.IsNullOrEmpty(userId))
+			//		{
+			//			return Results.Unauthorized();
+			//		}
+
+			//		var user = await dbContext.Users.FindAsync(userId);
+			//		if (user == null)
+			//		{
+			//			return Results.NotFound("User not found.");
+			//		}
+
+			//		var productIds = cart.CartProductDtos.Select(cp => cp.ProductId).ToList();
+			//		var products = await dbContext.Products.Where(p => productIds.Contains(p.Id)).ToListAsync();
+
+			//		var cartProducts = await dbContext.CartProducts.Where(cp => cp.User.Id == user.Id).ToListAsync();
+
+			//		foreach (var cartProductDto in cart.CartProductDtos)
+			//		{
+			//			// Find the cart product from the existing cart products
+			//			var existingCartProduct = cartProducts.FirstOrDefault(cp => cp.Product.Id == cartProductDto.ProductId);
+
+			//			if (existingCartProduct != null)
+			//			{
+			//				// If quantity is changed, adjust accordingly
+			//				if (cartProductDto.Quantity == 0)
+			//				{
+			//					// If quantity is set to 0, remove the cart product
+			//					dbContext.CartProducts.Remove(existingCartProduct);
+			//				}
+			//				else
+			//				{
+			//					// Otherwise, update the quantity
+			//					existingCartProduct.Quantity = cartProductDto.Quantity;
+			//				}
+			//			}
+			//			else
+			//			{
+			//				// If the product is not in the cart, add it
+			//				var product = products.First(p => p.Id == cartProductDto.ProductId);
+			//				var newCartProduct = new CartProduct
+			//				{
+			//					Id = user.Id,
+			//					ProductId = product.Id,
+			//					Quantity = cartProductDto.Quantity
+			//				};
+			//				await dbContext.CartProducts.AddAsync(newCartProduct);
+			//			}
+			//		}
+
+			//		cartProducts.AddRange(cart.CartProductDtos.ToCartProducts(products, user));
+
+			//		return Results.NoContent();
+			//	}).RequireAuthorization();
 
 			app.MapPost("/api/Order", async (HttpContext httpContext, [FromServices] WebShopDbContext dbContext, [FromBody] OrderRequestDTO orderRequest) =>
 			{

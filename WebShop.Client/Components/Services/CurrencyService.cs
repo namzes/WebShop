@@ -62,11 +62,12 @@ namespace WebShop.Client.Components.Services
 					if (exchangeRateResponse != null)
 					{
 						_exchangerate = exchangeRateResponse.ConversionRate;
-						
+						OnCurrencyChanged?.Invoke(_selectedCurrency);
 					}
 					else
 					{
 						_exchangerate = 1;
+						OnCurrencyChanged?.Invoke(_selectedCurrency);
 					}
 				}
 
@@ -75,6 +76,7 @@ namespace WebShop.Client.Components.Services
 			catch (Exception)
 			{
 				_exchangerate = 1;
+				OnCurrencyChanged?.Invoke(_selectedCurrency);
 			}
 		}
 		public void SetCurrency(string currency)

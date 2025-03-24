@@ -30,7 +30,6 @@ else
 		if (CurrentProduct != null)
 		{
 			await CartService.AddToCart(CurrentProduct);
-			await CartService.SyncCartToDatabase();
 			StateHasChanged();
 		}
 		else

@@ -1,5 +1,4 @@
 ﻿@page "/checkout"
-@using System.Diagnostics.Eventing.Reader
 @using WebShop.Client.Components.Features
 @using WebShop.Client.Components.Services
 @using Webshop.Shared.Models
@@ -106,7 +105,7 @@ else
 	{
 		OrderedProducts = new List<CartProductDisplayDTO>(Products);
 
-		await CartService.SyncCartToDatabase();
+		await CartService.SyncCartFromBackend();
 		_isOrderPlaced = await OrderService.PlaceOrder(CreateShippingDetails());
 		await InvokeAsync(StateHasChanged);
 	}

@@ -9,7 +9,7 @@ namespace WebShop.API.Extensions
 		{
 			var cartProductDto = new CartProductDTO()
 			{
-				ProductId = cartProduct.Id,
+				ProductId = cartProduct.Product.Id,
 				Quantity = cartProduct.Quantity,
 
 			};

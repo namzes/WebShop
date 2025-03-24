@@ -64,10 +64,7 @@ namespace WebShop.Client.Components.Services
 		public async Task SaveCart(CartDTO cart)
 		{
 				var client = _httpClientFactory.CreateClient("MinimalApi");
-			    var json = JsonSerializer.Serialize(cart);
-			    var content = new StringContent(json, Encoding.UTF8, "application/json");
-			    
-			    var response = await client.PostAsync("/api/Cart", content);
+			    var response = await client.PostAsJsonAsync("/api/Cart", cart);
 
 			    if (!response.IsSuccessStatusCode)
 			    {
@@ -75,9 +72,14 @@ namespace WebShop.Client.Components.Services
 			    }
 		}
 
-		public Task ClearCart()
+		public async Task ClearCart()
 		{
-			return Task.FromResult("No logic yet");
+			var client = _httpClientFactory.CreateClient("MinimalApi");
+			var response = await client.DeleteAsync("/api/DeleteCart");
+			if (!response.IsSuccessStatusCode)
+			{
+				Console.WriteLine("Deleting cart failed.");
+			}
 		}
 	}
 	public class CartService
@@ -97,14 +99,9 @@ namespace WebShop.Client.Components.Services
 		}
 		public async Task<CartDTO> GetCart()
 		{
-			_cart = await _backEndCartRepository.GetCart();
-
-			if (_cart == null || !_cart.CartProductDtos.Any())
-			{
-				_cart = await _cartRepository.GetCart();
-			}
-			await _cartRepository.SaveCart(_cart);
+			_cart = await _cartRepository.GetCart();
 			return _cart;
+			
 		}
 
 		public async Task AddToCart(ProductDTO productDto)
@@ -130,6 +127,7 @@ namespace WebShop.Client.Components.Services
 
 			}
 			await _cartRepository.SaveCart(_cart);
+			await SyncCartToDatabase();
 
 		}
 
@@ -153,12 +151,13 @@ namespace WebShop.Client.Components.Services
 			}
 			OnCartUpdated?.Invoke(_cart.CartProductDtos.Count);
 			await _cartRepository.SaveCart(_cart);
+			await SyncCartToDatabase();
 		}
 
 		public async Task ClearCart()
 		{
 			await _cartRepository.ClearCart();
-			_cart = new CartDTO();
+			await _backEndCartRepository.ClearCart();
 
 		}
 		public async Task<List<CartProductDisplayDTO>> GetCartProductDisplayDtos()
@@ -181,10 +180,23 @@ namespace WebShop.Client.Components.Services
 
 			return cartProductDisplayDtos;
 		}
+
 		public async Task SyncCartToDatabase()
 		{
 			_cart = await GetCart();
-			await _backEndCartRepository.SaveCart(_cart); // Save to backend
+			await _backEndCartRepository.SaveCart(_cart);
+		}
+		public async Task<CartDTO> SyncCartFromBackend()
+		{
+			var backendCart = await _backEndCartRepository.GetCart();
+
+			if (backendCart.CartProductDtos.Any())
+			{
+				_cart = backendCart;
+				await _cartRepository.SaveCart(_cart);
+			}
+
+			return _cart ?? new CartDTO();
 		}
 	}
 }

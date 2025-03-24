@@ -33,7 +33,6 @@
 
 		await CartService.AddToCart(Product.ToProductDto());
 		await OnQuantityChanged.InvokeAsync();
-		await CartService.SyncCartToDatabase();
 		StateHasChanged();
 	}
 
@@ -43,14 +42,12 @@
 		{
 			await CartService.RemoveFromCart(Product.ToProductDto());
 			await OnQuantityChanged.InvokeAsync();
-			await CartService.SyncCartToDatabase();
 			StateHasChanged();
 		}
 		else
 		{
 			await CartService.RemoveFromCart(Product.ToProductDto());
 			await OnQuantityChanged.InvokeAsync();
-			await CartService.SyncCartToDatabase();
 			StateHasChanged();
 
 		}
