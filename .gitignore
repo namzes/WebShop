@@ -368,5 +368,6 @@ appsettings.Development.json
 /API/appsettings.Development.json
 
 # MD
+GetStarted.ps1
 Analysis.md
 Assignment.md

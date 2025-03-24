@@ -7,11 +7,19 @@
 @rendermode InteractiveServer
 
 <div class="product-wrapper">
-	<div class="product-card" @onclick="NavigateToProductPage">
-		<img src="@Product.ImageUrl" alt="name" />
+	<div class="product-card @GetSaleClass()" @onclick="NavigateToProductPage">
+		@if (Product.Sale?.IsOnSale == true)
+		{
+			<span class="sale-badge">Sale</span>
+		}
+		<img src="@Product.ImageUrl" alt="name"/>
 		<div class="product-info-container">
 			<h3>@Product.Name</h3>
-			<CurrencyDisplay Price="@Product.Price"></CurrencyDisplay>
+			@if (Product.Sale?.IsOnSale == true)
+			{
+				<p class="old-price">@Product.Price</p>
+			}
+			<CurrencyDisplay Price="@(Product.Sale?.IsOnSale == true ? Product.Price * Product.Sale.SaleRate : Product.Price)"></CurrencyDisplay>
 		</div>
 	</div>
 	<button class="cart-add-button" @onclick="AddToCart">Add to Cart</button>
@@ -44,5 +52,8 @@
 
 		StateHasChanged();
 	}
-
+	private string GetSaleClass()
+	{
+		return Product.Sale?.IsOnSale == true ? "on-sale" : "";
+	}
 }

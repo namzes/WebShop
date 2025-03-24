@@ -21,7 +21,7 @@
     - [x] När formuläret skickas in ska användaren komma till en bekräftelsesida (page) där informationen om beställningen visas: Vilka produkter som köpts. Namn och adress från formuläret. När beställningen är klar ska varukorgen tömmas.
 - HTML/CSS/Blazor
     - [x] Minst 2 komponenter (inte pages/layout) ska användas.
-    - [ ] HTML ska användas på rätt sätt och valideras.
+    - [x] HTML ska användas på rätt sätt och valideras.
     - [x] Semantiska element när möjligt.
     - [x] CSS ska vara tydligt strukturerad och bidra till UI/UX.
     - [x] Appen ska vara responsiv och anpassad till mobile och desktop.
@@ -39,11 +39,11 @@
 - Produkter
     - [x] Lagras i databas (ej valutakursen).
     - [x] Produkter ska ha kvantiteter. De ska kunna bli slutsålda.
-    - [ ] Produkter ska kunna vara på rea.
+    - [x] Produkter ska kunna vara på rea.
 - Produktkomponent
-    - [ ] Ändra utseende om...
-        - [ ] varan är slut.
-        - [ ] varan är på rea.
+    - [x] Ändra utseende om...
+        - [x] varan är slut.
+        - [x] varan är på rea.
 - På produktsidan ska produktens pris kunna visas i olika valutor med hjälp av API:et https://api-ninjas.com/api/exchangerate.
     - [x] API:et måste användas på ett sätt som gör att slutanvändaren inte kan komma åt API-nyckeln.
 - Konton

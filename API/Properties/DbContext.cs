@@ -16,6 +16,8 @@ namespace WebShop.API.Properties
 		public DbSet<Product> Products { get; set; } = null!;
 		public DbSet<CartProduct> CartProducts { get; set; } = null!;
 		public DbSet<Order> Orders { get; set; } = null!;
+		public DbSet<OrderedProduct> OrderedProducts { get; set; } = null!;
+		public DbSet<Sale> Sales { get; set; } = null!;
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -24,6 +26,10 @@ namespace WebShop.API.Properties
 			modelBuilder.Entity<Product>()
 				.Property(p => p.Price)
 				.HasColumnType("decimal(18,2)");
+
+			modelBuilder.Entity<Sale>()
+				.Property(s => s.SaleRate)
+				.HasPrecision(3, 2);
 		}
 	}
 	

@@ -13,7 +13,7 @@ namespace WebShop.API.Extensions
 		{
 			app.MapGet("/api/Products", async (WebShopDbContext dbContext) =>
 			{
-				var products = await dbContext.Products.ToListAsync();
+				var products = await dbContext.Products.Include(p => p.Sale).ToListAsync();
 				return Results.Ok(products.ToProductDTOs());
 			});
 			app.MapGet("/api/Products/{id}", async (int id, WebShopDbContext dbContext) =>
@@ -177,64 +177,6 @@ namespace WebShop.API.Extensions
 
 			}).RequireAuthorization();
 
-			//app.MapPut("/api/UpdateCart",
-			//	async (HttpContext httpContext, WebShopDbContext dbContext, CartDTO cart) =>
-			//	{
-			//		var userId = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
-			//			?.Value;
-			//		if (string.IsNullOrEmpty(userId))
-			//		{
-			//			return Results.Unauthorized();
-			//		}
-
-			//		var user = await dbContext.Users.FindAsync(userId);
-			//		if (user == null)
-			//		{
-			//			return Results.NotFound("User not found.");
-			//		}
-
-			//		var productIds = cart.CartProductDtos.Select(cp => cp.ProductId).ToList();
-			//		var products = await dbContext.Products.Where(p => productIds.Contains(p.Id)).ToListAsync();
-
-			//		var cartProducts = await dbContext.CartProducts.Where(cp => cp.User.Id == user.Id).ToListAsync();
-
-			//		foreach (var cartProductDto in cart.CartProductDtos)
-			//		{
-			//			// Find the cart product from the existing cart products
-			//			var existingCartProduct = cartProducts.FirstOrDefault(cp => cp.Product.Id == cartProductDto.ProductId);
-
-			//			if (existingCartProduct != null)
-			//			{
-			//				// If quantity is changed, adjust accordingly
-			//				if (cartProductDto.Quantity == 0)
-			//				{
-			//					// If quantity is set to 0, remove the cart product
-			//					dbContext.CartProducts.Remove(existingCartProduct);
-			//				}
-			//				else
-			//				{
-			//					// Otherwise, update the quantity
-			//					existingCartProduct.Quantity = cartProductDto.Quantity;
-			//				}
-			//			}
-			//			else
-			//			{
-			//				// If the product is not in the cart, add it
-			//				var product = products.First(p => p.Id == cartProductDto.ProductId);
-			//				var newCartProduct = new CartProduct
-			//				{
-			//					Id = user.Id,
-			//					ProductId = product.Id,
-			//					Quantity = cartProductDto.Quantity
-			//				};
-			//				await dbContext.CartProducts.AddAsync(newCartProduct);
-			//			}
-			//		}
-
-			//		cartProducts.AddRange(cart.CartProductDtos.ToCartProducts(products, user));
-
-			//		return Results.NoContent();
-			//	}).RequireAuthorization();
 
 			app.MapPost("/api/Order", async (HttpContext httpContext, [FromServices] WebShopDbContext dbContext, [FromBody] OrderRequestDTO orderRequest) =>
 			{
@@ -256,7 +198,7 @@ namespace WebShop.API.Extensions
 					return Results.BadRequest("No valid cart products created.");
 				}
 
-				var productIds = cartProducts.Select(cp => cp.Id).ToList();
+				var productIds = cartProducts.Select(cp => cp.Product.Id).ToList();
 				var products = await dbContext.Products.Where(p => productIds.Contains(p.Id)).ToListAsync();
 
 				foreach (var product in products)

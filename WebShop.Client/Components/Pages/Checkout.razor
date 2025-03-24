@@ -61,8 +61,8 @@ else
 
 
 @code {
-	public required List<CartProductDisplayDTO> Products;
-	public required List<CartProductDisplayDTO> OrderedProducts;
+	public List<CartProductDisplayDTO> Products = new();
+	public List<CartProductDisplayDTO> OrderedProducts = new();
 	private string _fname = string.Empty;
 	private string _lname = string.Empty;
 	private string _address = string.Empty;
@@ -80,6 +80,8 @@ else
 		{
 			NavManager.NavigateTo("/user");
 		}
+
+		
 	}
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{

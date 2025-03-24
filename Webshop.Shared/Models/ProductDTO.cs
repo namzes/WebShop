@@ -15,5 +15,12 @@ namespace Webshop.Shared.Models
 		public decimal Price { get; set; }
 		public required string ImageUrl { get; set; }
 		public int Stock { get; set; }
+		public SaleDTO? Sale { get; set; }
+	}
+
+	public class SaleDTO
+	{
+		public bool IsOnSale { get; set; }
+		public decimal SaleRate { get; set; }
 	}
 }
